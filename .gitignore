@@ -43,3 +43,7 @@ coverage/
 .cache/
 .temp/
 
+# Large zip files
+*.zip
+!node_modules/*.zip
+
