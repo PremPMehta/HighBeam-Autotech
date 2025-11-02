@@ -1,0 +1,357 @@
+body {
+  margin: 0;
+  /* background-color: #101010; */
+  font-family: "DM Sans", serif;
+}
+
+::after,
+::before {
+  box-sizing: inherit !important;
+}
+
+.bookconsultation_sec {
+  padding: 60px 0;
+  background: #f8f9fa;
+  margin-top: 50px;
+  font-family: "DM Sans", serif;
+}
+
+.bookconsultation_sec .container {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
+
+.bookconsultation_sec .make_easy-title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.bookconsultation_sec .make_easy-title h2 {
+  color: #050B20;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  font-family: "Orbitron", sans-serif;
+}
+
+.bookconsultation_sec .make_easy-title p {
+  color: #050B20;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  font-weight: 400;
+  text-align: center;
+  justify-content: center;
+}
+
+
+
+.book_appointment p {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0;
+  margin: 0;
+  color: #050B20;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "DM Sans", serif;
+}
+
+.book_appointment p span {
+  color: #ffca00;
+  font-weight: 700;
+}
+
+.book_appointment {
+  margin-bottom: 10px;
+}
+
+/* Form row spacing */
+.bookconsultation_sec .row {
+  margin-bottom: 25px;
+}
+
+.bookconsultation_sec .row:last-child {
+  margin-bottom: 0;
+}
+
+/* Optional field styling */
+.book_appointment p:not(:has(span)) {
+  color: #050B20;
+  font-weight: 500;
+}
+
+.vechicle_year P {
+  margin: 0;
+  text-align: left;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.appointment_date {
+  margin-top: 20px;
+}
+
+.vechicle_year {
+  margin-top: 20px;
+}
+
+.menu_select select,
+.menu_select input,
+.menu_select textarea {
+  padding: 15px 18px;
+  border-radius: 16px;
+  border: 1px solid #E1E1E1;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  font-family: "DM Sans", serif;
+}
+
+.menu_select select:focus,
+.menu_select input:focus,
+.menu_select textarea:focus {
+  outline: none;
+  border-color: #ffca00;
+  box-shadow: 0 0 0 3px rgba(255, 202, 0, 0.1);
+}
+
+.menu_select select:hover,
+.menu_select input:hover,
+.menu_select textarea:hover {
+  border-color: #ffca00;
+}
+
+.book_checkbox form input {
+  padding: 0;
+}
+
+/* .book_checkbox form .form-check label {
+  font-size: 13px;
+} */
+
+.book_checkbox {
+  margin-top: 12px;
+}
+
+.check_box_one {
+  margin: 12px 0;
+}
+
+
+.check_box_two {
+  margin: 0;
+}
+
+/* Services section styling */
+.services_section {
+  margin-top: 20px;
+}
+
+.services_section .vechicle_year {
+  margin-bottom: 15px;
+}
+
+.services_section .book_checkbox {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 8px 0;
+}
+
+.services_section .book_checkbox .form-check {
+  margin: 0;
+  padding: 0;
+}
+
+.services_section .book_checkbox .form-check-input {
+  margin-right: 8px;
+  margin-top: 2px;
+}
+
+.services_section .book_checkbox .form-check-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  padding-left: 5px;
+}
+
+.services_section .book_checkbox:hover {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 8px -12px;
+}
+
+.book_contacts input {
+  padding: 12px;
+  margin-top: 16px;
+}
+
+.book_contacts textarea {
+  padding: 12px;
+  margin-top: 16px;
+  min-height: 205px;
+}
+
+.book_contacts_btn button {
+  width: 100%;
+  background-color: #ffca00;
+  color: #000;
+  border: 1px solid #ffca00;
+  padding: 18px 40px;
+  margin-top: 30px;
+  max-width: 350px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "DM Sans", serif;
+}
+
+.book_contacts_btn button:hover {
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #ffca00;
+}
+
+.book_contacts_btn {
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.comments_user {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+}
+
+.Comment_user {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.Comment_user h6 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.Comment_user p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.Comments-info {
+  margin-top: 20px;
+}
+
+.menu_select select {
+  margin-top: 8px;
+}
+
+.book_contacts input {
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.book_checkbox form {
+  border: 1px solid #dee2e6;
+  padding: 12px 12px;
+  border-radius: 12px;
+}
+
+
+/* .book_appointment {
+  margin-bottom: 0px;
+} */
+
+@media screen and (max-width: 991px) {
+  .check_box_two {
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  
+  .bookconsultation_sec .container {
+    padding: 30px 20px;
+  }
+  
+  .bookconsultation_sec .make_easy-title h2 {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .book_appointment p {
+    text-align: left;
+    font-size: 16px;
+  }
+
+  .book_contacts_btn button {
+    padding: 15px 25px;
+    margin-top: 20px;
+    max-width: 100%;
+    font-size: 16px;
+  }
+
+  .vehicle_years .book_appointment p {
+    font-size: 16px;
+    padding: 0;
+  }
+
+  .vechicle_year P {
+    font-size: 16px;
+    padding: 0;
+  }
+
+  .book_checkbox form {
+    padding: 8px 8px;
+  }
+
+  .book_contacts input {
+    padding: 12px;
+  }
+  
+  .bookconsultation_sec {
+    padding: 40px 0;
+  }
+  
+  .bookconsultation_sec .container {
+    padding: 25px 15px;
+    border-radius: 15px;
+  }
+  
+  .bookconsultation_sec .make_easy-title h2 {
+    font-size: 1.8rem;
+  }
+  
+  .menu_select select,
+  .menu_select input,
+  .menu_select textarea {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .book_contacts_btn button {
+    padding: 10px 10px;
+    margin-top: 8px;
+    max-width: 150px;
+    font-size: 14px;
+  }
+}

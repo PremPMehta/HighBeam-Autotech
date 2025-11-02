@@ -1,0 +1,92 @@
+.about_img {
+    max-width: 706px;
+    width: 100%;
+}
+
+.about_details h2 {
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 50px;
+}
+
+.about_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.about_point{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.check-text{
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.check-img{
+    margin-bottom: 0;
+}
+
+.check-img {
+    max-width: 14px;
+    width: 100%;
+}
+
+.check-img img {
+    width: 100%;
+    height: 100%;
+}
+
+.button_start{
+    margin-top: 50px;
+}
+
+.about_sec{
+    padding: 0;   
+}
+
+.about_point p {
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 500;
+}
+
+.button_start button {
+    max-width: 170px;
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 12px;
+    background-color: #405FF2;
+    border: 1px solid #405FF2;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.our_vision h4 {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28px;
+    margin: 0;
+}
+
+.our_vision h4  p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    margin: 0;
+}
+
+@media screen and (max-width: 1199px) {
+    .about_details h2 {
+        font-size: 32px;
+        line-height: 42px;
+    }
+  }

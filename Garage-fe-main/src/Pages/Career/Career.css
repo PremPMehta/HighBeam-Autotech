@@ -1,0 +1,285 @@
+.values_wrp {
+  margin-top: 100px;
+}
+
+.career_wrp {
+  text-align: left;
+}
+
+.career_wrp h5 {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.career_wrp p {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.serve_list h5 {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.serve_list p {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.service_wrp img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.service_wrp {
+  width: 125px;
+  margin: 0 auto 20px auto;
+}
+
+.values_list {
+  text-align: center;
+  border: 1px solid #000;
+  border-radius: 16px;
+  padding: 30px 20px;
+  min-height: 283px;
+}
+
+.join_wrp {
+  text-align: center;
+}
+
+
+
+.join_wrp h4 {
+  font-size: 40px;
+  line-height: 48px;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+
+.join_wrp p {
+  font-size: 23px;
+  margin-bottom: 0px;
+}
+
+.join_wrp span {
+  color: #405FF2;
+  font-size: 18px;
+}
+
+.mechanic_img {
+  max-width: 792px;
+  width: 100%;
+}
+
+.mechanic_img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.specail-offer h2 {
+  font-size: 40px;
+  line-height: 50px;
+}
+
+.specail-offer p {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  max-width: 350px;
+  width: 100%;
+}
+
+.specail-offer_search_bar input{
+    position: relative;
+    background-color: transparent;
+    border: 1px solid #E1E1E1;
+    padding: 12px 12px;
+    border-radius: 12px;
+    max-width: 300px;
+    width: 100%;
+}
+
+.specail-offer_search_bar form button {
+  max-width: 170px;
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background-color: #405ff2;
+  border: 1px solid #405ff2;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.specail-offer_search_bar form{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+  
+.carrer_wrap p {
+  text-align: left;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+@media screen and (max-width: 1199px) {
+  .values_list {
+    min-height: 313px;
+}
+
+.join_wrp h4 {
+  font-size: 32px;
+  line-height: 42px;
+}
+
+.join_wrp p {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.serve_list p {
+  font-size: 18px;
+}
+
+.serve_list h5 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.service_wrp {
+  width: 105px;
+  margin: 0 auto 20px auto;
+}
+}
+
+@media screen and (max-width: 991px) {
+
+  .special_offer .make_easy-title h2 {
+    font-size: 32px;
+    line-height: 42px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.values_wrp {
+  margin-top: 90px;
+}
+
+.values_list {
+  min-height: 233px;
+}
+
+.serve_list p {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.values_list {
+ margin-bottom: 20px;
+}
+
+.special_offer .make_easy-title p {
+  text-align: center;
+}
+
+.specail-offer_search_bar form {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.specail-offer_search_bar input {
+   max-width: 100%; 
+  width: 100%;
+}
+
+.specail-offer_search_bar form button {
+  max-width: 300px;
+  width: 100%;
+  font-size: 14px;
+  padding: 12px 22px;
+}
+
+
+}
+
+@media screen and (max-width: 776px) {
+
+  .values_wrp {
+    margin-top: 70px;
+  }
+
+  .carrer_wrap p {
+    text-align: center;
+}
+.join_wrp span {
+  font-size: 16px;
+}
+
+
+
+.values_list {
+  min-height: 233px;
+}
+
+
+
+  
+  
+}
+
+@media screen and (max-width: 575px) {
+  .values_list {
+    min-height: 173px;
+}
+
+.values_wrp {
+  margin-top: 50px;
+}
+
+
+.join_wrp h4 {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.join_wrp p {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.join_wrp span {
+  font-size: 14px;
+}
+
+.special_offer .make_easy-title h2 {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.specail-offer_search_bar form { 
+  gap: 10px;
+}
+
+.specail-offer_search_bar form button {
+  font-size: 14px;
+  padding: 10px 10px;
+}
+
+
+.values_list {
+  padding: 12px 12px;
+}
+}
+

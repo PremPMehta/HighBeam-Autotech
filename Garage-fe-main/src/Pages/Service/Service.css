@@ -1,0 +1,171 @@
+.slick-slider {
+  overflow: hidden;
+}
+
+.service_details {
+  margin-top: 50px;
+}
+
+.service_datalist {
+  display: flex;
+  align-items: center;
+}
+
+.servaice_wrp img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.servaice_wrp {
+  max-width: 706px;
+  width: 100%;
+}
+
+.button_start {
+  margin-top: 18px;
+}
+
+.button_start button {
+  max-width: 170px;
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background-color: #405ff2;
+  border: 1px solid #405ff2;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+
+.form_datalist {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.request_btn button {
+  max-width: 100%;
+  padding: 11px 24px;
+  border-radius: 12px;
+  background-color: #405ff2;
+  border: 1px solid #405ff2;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.scheduling_appoiment {
+  margin-top: 15px;
+}
+
+.scheduling_appoiment p {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 27px;
+  margin: 0;
+}
+
+.form_datalist .menu_select select{
+  margin-top: 0;
+}
+
+.schedule_datalist {
+  background-color: #f9fbfc;
+  border: 1px solid #e1e1e1;
+  border-radius: 16px;
+  padding: 40px;
+}
+
+.schedule_datalist .make_easy-title p{
+font-size: 16px;
+line-height: 24px;
+margin-bottom: 0;
+}
+
+.service_datalist .button_start button {
+  max-width: 271px;
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background-color: #405ff2;
+  border: 1px solid #405ff2;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.opening_hours {
+  border: 1px solid #e1e1e1;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.tieme_days {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tieme_days p {
+  margin: 0;
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.opening_hours h4 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  line-height: 28px;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 991px) {
+  .schedule_datalist {
+    padding: 30px;
+}
+}
+
+@media screen and (max-width: 776px) {
+  .servcie_info_detail{
+    margin-top: 30px;
+  }
+  .opening_hours{
+    margin-top: 20px;
+  }
+
+
+}
+
+@media screen and (max-width: 575px) {
+  .service_datalist .button_start button {
+    max-width: 211px;
+    width: 100%;
+    padding: 10px 10px; 
+    font-size: 14px;
+}
+
+.schedule_datalist {
+  padding: 20px;
+}
+}
+
+@media screen and (max-width: 375px) {
+ 
+.schedule_datalist {
+  padding: 20px;
+}
+}
+  
+  

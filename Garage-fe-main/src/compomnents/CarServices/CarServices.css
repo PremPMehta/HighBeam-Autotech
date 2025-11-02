@@ -1,0 +1,103 @@
+.cars_service_sec .service_box_img_wrap img {
+    width: 80px;
+    height: 80px;
+    /* filter: invert(27%) sepia(83%) saturate(1999%) hue-rotate(221deg) brightness(99%) contrast(91%); */
+}
+
+.cars_service_sec .service_box_img_wrap {
+    border: 1px solid #dee2e6;
+    border-bottom: unset;
+    text-align: center;
+    border-radius: 15px 15px 0 0;
+    padding: 20px;
+}
+
+.cars_service_sec .service_box .service_title h4 {
+    text-align: center;
+}
+
+.car_tabs .tabs_active {
+    border-bottom: 1px solid #dee2e6;
+    transition: all 0.4s;
+    cursor: pointer;
+}
+
+.car_tabs .tabs_active span {
+    transition: all 0.4s;
+}
+
+.car_tabs .tabs_active.active {
+    border-bottom: 1px solid #ffca00;
+}
+
+.car_tabs .tabs_active.active span {
+    color: #ffca00;
+}
+
+.car_tabs .tabs_active:hover {
+    border-bottom: 1px solid #ffca00;
+}
+
+.car_tabs .tabs_active:hover span {
+    color: #ffca00;
+}
+
+.car_tabs h4 {
+    font-size: 25px;
+    margin-bottom: 20px;
+    font-family: "Orbitron", sans-serif;
+}
+
+.car_tabs .text-muted {
+    font-size: 18px;
+    margin-bottom: 20px !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+.car_tabs .car_services p {
+    font-size: 16px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+.car_tabs .action_section .text-muted {
+    margin-bottom: 0 !important;
+}
+
+.car_tabs .action_section button {
+    padding: 10px 12px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #000;
+    font-family: "Orbitron", sans-serif;
+}
+
+.car_tabs .badge {
+    padding: 8px 12px;
+    font-size: 16px;
+}
+
+.car_tabs img {
+    width: 100%;
+}
+
+.car_tabs svg {
+    vertical-align: -3px;
+    width: 18px;
+    flex-shrink: 0;
+}
+
+.car_services p svg {
+    color: #ffca00;
+    filter: sepia(1);
+    margin-right: 10px;
+}

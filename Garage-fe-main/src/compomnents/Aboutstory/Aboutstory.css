@@ -1,0 +1,138 @@
+.about_img {
+    max-width: 706px;
+    width: 100%;
+}
+
+.about_details h2 {
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 50px;
+    margin-bottom: 20px;
+    font-family: "Orbitron", sans-serif;
+}
+
+.about_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.years h5 {
+    font-family: "Orbitron", sans-serif;
+}
+
+.button_start .btn {
+    border: 1px solid #ffca00 !important;
+    background-color: #ffca00;
+    color: #000;
+    border: none;
+}
+.button_start .btn:hover {
+    border-color: #ffca00 !important;
+    color: #000 !important;
+}
+.button_start .btn img {
+    filter: invert(1);
+}
+
+.about_img.car_services {
+    height: calc(185px + (430 - 185) * ((100vw - 320px) / (1920 - 320)));
+}
+
+.about_point {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.check-text {
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.check-img {
+    margin-bottom: 0;
+}
+
+.check-img {
+    max-width: 14px;
+    width: 100%;
+}
+
+.check-img img {
+    width: 100%;
+    height: 100%;
+}
+
+.button_start {
+    margin-top: 50px;
+}
+
+.about_sec {
+    padding: 0;
+}
+
+.about_point p {
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.about_sec_our_story .about_details p {
+    margin-bottom: 10px;
+}
+
+.button_start button {
+    max-width: 170px;
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 12px;
+    background-color: #405FF2;
+    border: 1px solid #405FF2;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.get_in_touch {
+    margin-top: 24px;
+}
+
+.about_details h4 {
+    font-size: 18px;
+    font-weight: 600;
+    /* display: flex;
+    align-items: center; */
+}
+
+@media screen and (max-width: 1199px) {
+    .about_details h2 {
+        font-size: 32px;
+        line-height: 42px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .get_in_touch {
+        margin-top: 16px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .about_sec_our_story .button_start button {
+        max-width: 135px;
+        width: 100%;
+        padding: 8px 8px;
+        font-size: 14px;
+    }
+
+    .about_sec_our_story .about_details h2 {
+        font-size: 24px;
+        line-height: 32px;
+    }
+}

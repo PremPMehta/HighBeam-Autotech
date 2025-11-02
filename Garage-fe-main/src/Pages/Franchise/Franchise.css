@@ -1,0 +1,321 @@
+body {
+  margin: 0;
+  /* background-color: #101010; */
+  font-family: "DM Sans", serif;
+}
+
+::after,
+::before {
+  box-sizing: inherit !important;
+}
+
+.car_demo {
+  max-width: 852px;
+  width: 100%;
+  margin-left: auto;
+  padding-left: 110px;
+}
+
+.car_demo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mission_possible {
+  background-color: #fff;
+  margin: 0;
+}
+
+.awrad_winnig {
+  background-color: #fff;
+
+}
+
+.awrad_winnig h2 {
+  font-size: 20px;
+  line-height: 28px;
+  color: #313131;
+  margin-bottom: 12px;
+}
+
+.awrad_winnig h6 {
+  font-size: 18px;
+  line-height: 26px;
+  color: #313131;
+  margin-bottom: 12px;
+
+}
+
+.awrad_winnig p {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+  text-align: left;
+}
+
+.awrad_winnig_check {
+  margin-top: 20px;
+}
+
+.mission_img {
+  max-width: 718px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  height: 652px;
+}
+
+.overlay {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffffb5;
+}
+
+.mission_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mission_text {
+  position: absolute;
+  top: 0;
+  padding-top: 60px;
+  padding-left: 24px;
+}
+
+.mission_text h2 {
+  font-size: 20px;
+  line-height: 28px;
+  color: #313131;
+  padding-bottom: 24px;
+}
+
+.mission_text ul {
+  margin: 0;
+  padding-left: 24px;
+}
+
+.mission_text h6 {
+  font-size: 44px;
+  line-height: 55px;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.mission_text ul li a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.mission_text button {
+  max-width: 173px;
+  width: 100%;
+  background-color: #405FF2;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 16px;
+  margin-top: 48px;
+}
+
+.become_partner {
+  background-color: #fff;
+}
+
+.franchise_number h3 {
+  font-size: 200px;
+}
+
+.franchise_customers {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  justify-content: right;
+}
+
+.vehicle_repair h6 {
+  font-size: 48px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.vehicle_repair p {
+  font-size: 16px;
+  text-align: left;
+  font-weight: 500;
+  margin: 0;
+}
+
+.Franchise_img {
+  max-width: 812px;
+  width: 100%;
+  margin-top: -100px;
+  position: relative;
+}
+
+.Franchise_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.submit_btn button {
+  max-width: 173px;
+  width: 100%;
+  background-color: #405FF2;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 16px;
+  margin-top: 48px;
+}
+
+.submit_btn {
+  text-align: center;
+}
+
+.investment_india h2 {
+  text-align: center;
+  font-weight: 600;
+  font-size: 40px;
+  margin-bottom: 40px;
+}
+
+.investment_india p {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 26px;
+  text-align: center;
+  max-width: 1040px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.awrad_winnig_check {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media only screen and (max-width: 1199px) {
+  .mission_text h2 {
+    padding-bottom: 8px;
+    margin: 0;
+}
+
+.awrad_winnig h2 {
+  text-align: left;
+}
+
+
+
+.mission_text h6 {
+  font-size: 34px;
+  line-height: 44px;
+}
+
+.mission_text button {
+  max-width: 163px;
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 16px;
+  margin-top: 24px;
+}
+
+.franchise_number h3 {
+  font-size: 180px;
+}
+
+.vehicle_repair h6 {
+  font-size: 40px;
+  font-weight: 500;
+}
+
+.submit_btn button {
+  margin-top: 24px;
+}
+
+.investment_india h2 {
+  font-size: 32px;
+  line-height: 40px;
+  margin-bottom: 30px;
+}
+
+.investment_india p {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.franchise_number h3 {
+  font-size: 120px;
+  text-align: center;
+  margin-bottom: 0;
+}
+}
+
+@media only screen and (max-width: 991px) {
+  .car_demo {
+    max-width: 442px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    padding-left: 0;
+}
+}
+
+@media only screen and (max-width: 776px) {
+  .mission_possible{
+    margin-top: 70px;
+  }
+
+  .Franchise_img {
+    max-width: 812px;
+    width: 100%;
+    margin-top: 60px;
+    position: relative;
+}
+
+
+}
+@media only screen and (max-width: 575px) {
+  .franchise_customers {
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+  .become_partner .make_easy-title p {
+    text-align: center ;
+  }
+
+  .Franchise_img {
+    max-width: 812px;
+    width: 100%;
+    margin-top: 50px;
+    position: relative;
+}
+
+.vehicle_repair h6 {
+  font-size: 30px;
+}
+
+.investment_india h2 {
+  font-size: 24px;
+  line-height: 32px;
+  margin-bottom: 16px;
+}
+
+.submit_btn button {
+  padding: 10px 10px;
+
+
+}
+}

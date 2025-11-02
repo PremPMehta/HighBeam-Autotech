@@ -1,0 +1,62 @@
+
+::after,
+::before {
+  box-sizing: inherit !important;
+}
+.google-btn {
+  width: 200px;
+  background-color: linear-gradient(45deg, #4285f4, #34a853, #fbbc05, #ea4335);
+}
+
+/* .bg-im {
+
+} */
+
+.facebook-btn {
+  width: 200px;
+  color: blue;
+}
+.apple-btn {
+  width: 200px;
+  color: black;
+}
+.bg-image img {
+  height: 100vh;
+  width: 100%;
+  object-fit: cover;
+}
+
+.login_up_wrap{
+  align-items: center;
+  justify-content: center;
+}
+
+.login_up_form form {
+  max-width: 532px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* .login_up_form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+@media only screen and (max-width: 767px) {
+  .bg-image{
+  display: none;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .login_up_wrap {
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+  }
+
+  
+  
+}
+

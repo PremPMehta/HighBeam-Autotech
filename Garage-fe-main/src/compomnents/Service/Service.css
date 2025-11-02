@@ -1,0 +1,84 @@
+.service_sec {
+    padding-top: 0;
+    background-color: #fff;
+    padding-bottom: 0;
+}
+
+.service_box_img_wrap {
+    width: 100%;
+}
+
+.service_box_img_wrap img {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px 16px 0 0;
+}
+
+.service_title h4 {
+    margin-bottom: 6px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.service_box_info {
+    padding: 16px 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 0 0 16px 16px;
+}
+
+.service_title p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.service_miles p {
+    font-size: 14px;
+    margin-bottom: 0;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.service_detail {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid #E9E9E9;
+    padding-top: 10px;
+}
+
+.service_miles {
+  text-align: center;
+}
+
+.service_benefits {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 8px;
+    border-top: 1px solid #E9E9E9;
+    padding: 10px 0 0px 0px;
+}
+
+.service_pay p {
+    margin: 0;
+}
+
+
+.View_Details a {
+    text-decoration: none;
+    color: #405FF2;
+}
+
+.View_Details a {
+    text-decoration: none;
+    color: #405FF2;
+    font-size: 15px;
+    line-height: 22px;
+    display: flex;
+    gap: 9px;
+    align-items: center;
+}
