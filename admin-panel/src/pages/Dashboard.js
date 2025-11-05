@@ -16,9 +16,9 @@ import {
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import LoadingSpinner from '../components/LoadingSpinner';
-
+import '../style.css';
 const StatCard = ({ title, value, icon, color = 'primary' }) => (
-  <Card>
+  <Card className="card">
     <CardContent>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Box>
@@ -72,39 +72,39 @@ const Dashboard = () => {
   }
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom sx={{mb:3}}>
         Dashboard
       </Typography>
       
       <Grid container spacing={3}>
         {/* Statistics Cards */}
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
+        <Grid item xs={12} sm={6} xl={3}>
+          <StatCard className="card"
             title="Total Leads"
             value={stats?.totalLeads || 0}
-            icon={<PeopleIcon sx={{ fontSize: 40 }} />}
+            icon={<PeopleIcon sx={{ fontSize: 40 , color:'#ffca00'}} />}
             color="primary"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
+        <Grid item xs={12} sm={6} xl={3}>
+          <StatCard className="card"
             title="Recent Leads"
             value={stats?.recentLeads || 0}
             icon={<TrendingUpIcon sx={{ fontSize: 40 }} />}
             color="success"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
+        <Grid item xs={12} sm={6} xl={3}>
+          <StatCard className="card"
             title="New This Week"
             value={stats?.recentLeads || 0}
             icon={<EmailIcon sx={{ fontSize: 40 }} />}
             color="info"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
+        <Grid item xs={12} sm={6} xl={3}>
+          <StatCard className="card"
             title="Converted"
             value={stats?.statusBreakdown?.find(s => s._id === 'converted')?.count || 0}
             icon={<CheckCircleIcon sx={{ fontSize: 40 }} />}
@@ -114,7 +114,7 @@ const Dashboard = () => {
 
         {/* Recent Leads */}
         <Grid item xs={12}>
-          <Paper sx={{ p: 2 }}>
+          <Paper className="card" sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
               Recent Leads
             </Typography>
@@ -167,7 +167,7 @@ const Dashboard = () => {
 
         {/* Status Breakdown */}
         <Grid item xs={12}>
-          <Paper sx={{ p: 2 }}>
+          <Paper className="card" sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
               Lead Status Breakdown
             </Typography>

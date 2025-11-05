@@ -25,6 +25,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Image as ImageIcon,
+  Close as CloseIcon,
 } from '@mui/icons-material';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
@@ -56,7 +57,7 @@ const Categories = () => {
         });
         console.log('Categories API full response:', response);
         console.log('Categories API response data:', response.data);
-        
+
         // Handle different response formats
         let categories = [];
         if (response.data?.data?.categories) {
@@ -66,25 +67,25 @@ const Categories = () => {
         } else if (Array.isArray(response.data)) {
           categories = response.data;
         }
-        
+
         console.log('Categories extracted:', categories);
         console.log('Number of categories:', categories.length);
-        
+
         if (categories.length === 0) {
           console.log('No categories found in database');
         }
-        
+
         return categories;
       } catch (error) {
         console.error('Error fetching categories:', error);
         console.error('Error response:', error.response);
         console.error('Error status:', error.response?.status);
         console.error('Error data:', error.response?.data);
-        
+
         // Re-throw error so react-query can handle it properly
         const errorMsg = error.response?.data?.message || error.message || 'Unknown error';
         const status = error.response?.status;
-        
+
         if (status === 401) {
           toast.error('Authentication failed. Please log in again.');
         } else if (status === 403) {
@@ -92,9 +93,9 @@ const Categories = () => {
         } else if (error.code === 'ECONNABORTED') {
           toast.error('Request timed out. Please check your connection.');
         } else {
-        toast.error('Failed to load categories: ' + errorMsg);
+          toast.error('Failed to load categories: ' + errorMsg);
         }
-        
+
         throw error; // Re-throw to let react-query handle the error state
       }
     },
@@ -110,16 +111,16 @@ const Categories = () => {
       console.log('Saving category:', data);
       try {
         let response;
-      if (selectedCategory) {
+        if (selectedCategory) {
           console.log('Updating category:', selectedCategory._id);
           response = await axios.put(`/api/categories/${selectedCategory._id}`, data, {
-          timeout: 10000,
-        });
-      } else {
+            timeout: 10000,
+          });
+        } else {
           console.log('Creating new category');
           response = await axios.post('/api/categories', data, {
-          timeout: 10000,
-        });
+            timeout: 10000,
+          });
         }
         console.log('Category save response:', response.data);
         return response.data;
@@ -139,11 +140,11 @@ const Categories = () => {
       onError: (error) => {
         console.error('Save mutation error:', error);
         let errorMessage = 'Failed to save category';
-        
+
         if (error.response) {
           const status = error.response.status;
           const data = error.response.data;
-          
+
           if (status === 401) {
             errorMessage = 'Authentication failed. Please log in again.';
           } else if (status === 403) {
@@ -157,7 +158,7 @@ const Categories = () => {
         } else if (error.message) {
           errorMessage = error.message;
         }
-        
+
         toast.error(errorMessage);
       },
     }
@@ -259,153 +260,169 @@ const Categories = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Categories</Typography>
+        <Typography variant="h5">Categories</Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => handleOpenDialog()}
+          sx={{ backgroundColor: '#ffca00', color: '#000', '&:hover': { backgroundColor: '#e6b800' }, boxShadow: 'none', borderRadius: '8px', paddingBlock: '10px', paddingInline: '16px' }}
         >
           Add Category
         </Button>
       </Box>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Image</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Icon</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Display Order</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {error ? (
-              <TableRow>
-                <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
-                  <Typography variant="body1" color="error" gutterBottom>
-                    Error loading categories
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {error.response?.data?.message || error.message || 'An unknown error occurred'}
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => queryClient.refetchQueries('categories')}
-                    sx={{ mt: 2 }}
-                  >
-                    Retry
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ) : !data || data.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
-                  <Typography variant="body1" color="text.secondary" gutterBottom>
-                    No categories found
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Click "Add Category" to create your first category
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ) : (
-              data.map((category) => (
-                <TableRow key={category._id}>
-                  <TableCell>
-                    {category.image ? (
-                      <img
-                        src={category.image.startsWith('http') ? category.image : `http://localhost:5001${category.image}`}
-                        alt={category.name}
-                        style={{ width: 50, height: 50, objectFit: 'cover', borderRadius: 4 }}
-                      />
-                    ) : (
-                      <Box
-                        sx={{
-                          width: 50,
-                          height: 50,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          bgcolor: 'grey.200',
-                          borderRadius: 1,
-                        }}
-                      >
-                        <ImageIcon color="disabled" />
-                      </Box>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" fontWeight="medium">
-                      {category.name}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    {category.icon && (category.icon.startsWith('http') || category.icon.startsWith('/')) ? (
-                      <img
-                        src={category.icon.startsWith('http') ? category.icon : `http://localhost:5001${category.icon}`}
-                        alt={category.name}
-                        style={{ width: 40, height: 40, objectFit: 'contain' }}
-                      />
-                    ) : category.icon ? (
-                      <Chip 
-                        label={category.icon} 
-                        size="small" 
-                        variant="outlined"
-                        color="warning"
-                        sx={{ fontFamily: 'monospace', fontSize: '0.7rem' }}
-                      />
-                    ) : (
-                      <Typography variant="caption" color="text.secondary">
-                        No icon
-                      </Typography>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {category.description || 'N/A'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{category.displayOrder}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={category.isActive ? 'Active' : 'Inactive'}
-                      color={category.isActive ? 'success' : 'default'}
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      size="small"
-                      onClick={() => handleOpenDialog(category)}
-                      color="primary"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleOpenDeleteDialog(category)}
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{
+        borderRadius: '15px',
+        overflow: 'hidden',
+      }}>
+        <Box sx={{ overflow: "auto" }}>
+          <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+            <TableContainer component={Paper} className="card" sx={{ overflowX: 'auto', }}>
+              <Table sx={{ minWidth: 650 }} aria-label="users table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Image</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Icon</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Display Order</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell align="right">Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {error ? (
+                    <TableRow>
+                      <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                        <Typography variant="body1" color="error" gutterBottom>
+                          Error loading categories
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {error.response?.data?.message || error.message || 'An unknown error occurred'}
+                        </Typography>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={() => queryClient.refetchQueries('categories')}
+                          sx={{ mt: 2 }}
+                        >
+                          Retry
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ) : !data || data.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                        <Typography variant="body1" color="text.secondary" gutterBottom>
+                          No categories found
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Click "Add Category" to create your first category
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    data.map((category) => (
+                      <TableRow key={category._id}>
+                        <TableCell>
+                          {category.image ? (
+                            <img
+                              src={category.image.startsWith('http') ? category.image : `http://localhost:5001${category.image}`}
+                              alt={category.name}
+                              style={{ width: 50, height: 50, objectFit: 'cover', borderRadius: 4 }}
+                            />
+                          ) : (
+                            <Box
+                              sx={{
+                                width: 50,
+                                height: 50,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                bgcolor: 'grey.200',
+                                borderRadius: 1,
+                              }}
+                            >
+                              <ImageIcon color="disabled" />
+                            </Box>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2" fontWeight="medium">
+                            {category.name}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          {category.icon && (category.icon.startsWith('http') || category.icon.startsWith('/')) ? (
+                            <img
+                              src={category.icon.startsWith('http') ? category.icon : `http://localhost:5001${category.icon}`}
+                              alt={category.name}
+                              style={{ width: 40, height: 40, objectFit: 'contain' }}
+                            />
+                          ) : category.icon ? (
+                            <Chip
+                              label={category.icon}
+                              size="small"
+                              variant="outlined"
+                              color="warning"
+                              sx={{ fontFamily: 'monospace', fontSize: '0.7rem' }}
+                            />
+                          ) : (
+                            <Typography variant="caption" color="text.secondary">
+                              No icon
+                            </Typography>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {category.description || 'N/A'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>{category.displayOrder}</TableCell>
+                        <TableCell>
+                          <Chip
+                            label={category.isActive ? 'Active' : 'Inactive'}
+                            color={category.isActive ? 'success' : 'default'}
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleOpenDialog(category)}
+                            color="primary"
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleOpenDeleteDialog(category)}
+                            color="error"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Box>
+      </Box>
 
       {/* Add/Edit Dialog */}
       <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="md" fullWidth>
-        <DialogTitle>{selectedCategory ? 'Edit Category' : 'Add Category'}</DialogTitle>
+        <DialogTitle sx={{ borderBottom: '1px solid #e0e0e0', justifyContent: 'space-between', display: 'flex', alignItems: 'center' }}>{selectedCategory ? 'Edit Category' : 'Add Category'}
+          <IconButton
+            onClick={handleCloseDialog}
+            className="ml-auto text-gray-400 hover:text-gray-200"
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid item xs={12}>
@@ -471,9 +488,9 @@ const Categories = () => {
                 </Box>
               ) : formData.icon ? (
                 <Box sx={{ mb: 2 }}>
-                  <Chip 
-                    label={`Current: ${formData.icon} (React Icon - upload image to replace)`} 
-                    size="small" 
+                  <Chip
+                    label={`Current: ${formData.icon} (React Icon - upload image to replace)`}
+                    size="small"
                     variant="outlined"
                     color="warning"
                     sx={{ fontFamily: 'monospace', fontSize: '0.75rem', mb: 1 }}
@@ -511,7 +528,7 @@ const Categories = () => {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={10}>
               <TextField
                 fullWidth
                 type="number"
@@ -520,24 +537,25 @@ const Categories = () => {
                 onChange={(e) => setFormData({ ...formData, displayOrder: parseInt(e.target.value) || 0 })}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={2}>
               <Box display="flex" alignItems="center" height="100%">
                 <Chip
                   label={formData.isActive ? 'Active' : 'Inactive'}
                   color={formData.isActive ? 'success' : 'default'}
                   onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
-                  sx={{ cursor: 'pointer' }}
+                  sx={{ cursor: 'pointer', width: '100%', height: '100%', borderRadius: '5px', fontSize: '14px' }}
                 />
               </Box>
             </Grid>
           </Grid>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
+        <DialogActions sx={{ borderTop: '1px solid #e0e0e0', padding: '16px' }}>
+          <Button onClick={handleCloseDialog} sx={{ backgroundColor: '#f5f5f5', color: '#000', '&:hover': { backgroundColor: '#e0e0e0' }, boxShadow: 'none', borderRadius: '8px', paddingBlock: '10px', paddingInline: '16px' }}>Cancel</Button>
           <Button
             onClick={handleSubmit}
             variant="contained"
             disabled={saveMutation.isLoading}
+            sx={{ backgroundColor: '#ffca00', color: '#000', '&:hover': { backgroundColor: '#e6b800' }, boxShadow: 'none', borderRadius: '8px', paddingBlock: '10px', paddingInline: '16px' }}
           >
             {saveMutation.isLoading ? 'Saving...' : selectedCategory ? 'Update' : 'Create'}
           </Button>

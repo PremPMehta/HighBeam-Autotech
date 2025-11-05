@@ -20,6 +20,7 @@ import {
   Save as SaveIcon,
   ArrowBack as ArrowBackIcon,
   Edit as EditIcon,
+  BorderColor,
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
@@ -317,7 +318,7 @@ const PageEditor = () => {
   // Helper to merge saved data with defaults, keeping defaults if saved is empty
   const mergeWithDefaults = (savedData, defaults) => {
     const merged = { ...defaults };
-    
+
     if (savedData) {
       // Convert sections array to object format if needed
       let savedObject = savedData;
@@ -327,7 +328,7 @@ const PageEditor = () => {
           savedObject[section.sectionId] = section.content;
         });
       }
-      
+
       // Deep merge, but keep default images if saved image is empty
       Object.keys(savedObject).forEach(key => {
         if (typeof savedObject[key] === 'object' && savedObject[key] !== null && !Array.isArray(savedObject[key])) {
@@ -350,7 +351,7 @@ const PageEditor = () => {
         }
       });
     }
-    
+
     return merged;
   };
 
@@ -373,7 +374,7 @@ const PageEditor = () => {
         delete dataToSave.services;
         delete dataToSave.servicesHeader;
       }
-      
+
       // Convert object to sections array format
       const sections = Object.keys(dataToSave).map((key, index) => ({
         sectionId: key,
@@ -411,10 +412,10 @@ const PageEditor = () => {
       },
       onError: (error) => {
         console.error('Save page error:', error);
-        const errorMessage = error.response?.data?.message || 
-                           error.response?.data?.error || 
-                           error.message || 
-                           'Failed to save page';
+        const errorMessage = error.response?.data?.message ||
+          error.response?.data?.error ||
+          error.message ||
+          'Failed to save page';
         toast.error(errorMessage);
       },
     }
@@ -453,7 +454,7 @@ const PageEditor = () => {
 
   const handleSaveEdit = () => {
     const newData = { ...pageData };
-    
+
     if (currentEdit.sectionKey.includes('.')) {
       // Nested field (e.g., 'about.features.0.title')
       const [parent, ...path] = currentEdit.sectionKey.split('.');
@@ -504,13 +505,13 @@ const PageEditor = () => {
   const renderHomePageEditor = () => (
     <>
       {/* Hero Section 1 */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="h6">Hero Section 1</Typography>
         </Box>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
+          <Grid item xs={12} sm={6}>
             <ImageUpload
               label="Hero 1 Background Image"
               value={pageData.hero1?.image || ''}
@@ -534,8 +535,8 @@ const PageEditor = () => {
                 }}
                 size="small"
               />
-              <IconButton onClick={() => handleEdit('hero1', 'title')}>
-                <EditIcon />
+              <IconButton onClick={() => handleEdit('hero1', 'title')} sx={{ backgroundColor: '#ffca00', borderRadius: '5px', '&:hover': { backgroundColor: '#ffca00' } }}>
+                <EditIcon sx={{ color: '#000' }} />
               </IconButton>
             </Box>
           </Grid>
@@ -571,13 +572,13 @@ const PageEditor = () => {
       </Paper>
 
       {/* Hero Section 2 */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="h6">Hero Section 2</Typography>
         </Box>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
+          <Grid item xs={12} sm={6}>
             <ImageUpload
               label="Hero 2 Background Image"
               value={pageData.hero2?.image || ''}
@@ -633,11 +634,11 @@ const PageEditor = () => {
       </Paper>
 
       {/* Car Repair Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Car Repair Section</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item xs={12} sm={6}>
             <ImageUpload
               label="Car Repair Image"
               value={pageData.carRepair?.image || ''}
@@ -678,9 +679,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Core Values Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Core Values Section</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="Section Title"
@@ -692,7 +693,7 @@ const PageEditor = () => {
           }}
           sx={{ mb: 3 }}
         />
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           {pageData.coreValues?.map((value, index) => (
             <Grid item xs={12} md={6} key={value.id}>
               <Paper variant="outlined" sx={{ p: 2 }}>
@@ -719,7 +720,7 @@ const PageEditor = () => {
                     newData.coreValues[index].title = e.target.value;
                     setPageData(newData);
                   }}
-                  sx={{ mb: 1 }}
+                  sx={{ mt: 3 }}
                 />
                 <TextField
                   fullWidth
@@ -733,6 +734,7 @@ const PageEditor = () => {
                     newData.coreValues[index].description = e.target.value;
                     setPageData(newData);
                   }}
+                  sx={{ mt: 3 }}
                 />
               </Paper>
             </Grid>
@@ -741,11 +743,11 @@ const PageEditor = () => {
       </Paper>
 
       {/* About Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>About Section</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
+          <Grid item xs={12} sm={6}>
             <ImageUpload
               label="About Section Image"
               value={pageData.about?.image || ''}
@@ -769,7 +771,7 @@ const PageEditor = () => {
             />
           </Grid>
           {pageData.about?.features?.map((feature, index) => (
-            <Grid item xs={12} key={index}>
+            <Grid item xs={12} md={6} key={index}>
               <Paper variant="outlined" sx={{ p: 2 }}>
                 <Typography variant="subtitle2" gutterBottom>
                   Feature {index + 1}
@@ -784,7 +786,7 @@ const PageEditor = () => {
                     newData.about.features[index].title = e.target.value;
                     setPageData(newData);
                   }}
-                  sx={{ mb: 1 }}
+                  sx={{ mt: 3 }}
                 />
                 <TextField
                   fullWidth
@@ -798,6 +800,7 @@ const PageEditor = () => {
                     newData.about.features[index].description = e.target.value;
                     setPageData(newData);
                   }}
+                  sx={{ mt: 3 }}
                 />
               </Paper>
             </Grid>
@@ -823,26 +826,33 @@ const PageEditor = () => {
   const renderAboutPageEditor = () => (
     <>
       {/* Hero Sections */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Hero Section 1</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <ImageUpload
-              label="Hero 1 Background Image"
-              value={pageData.hero1?.image || ''}
-              onChange={(url) => {
-                const newData = { ...pageData };
-                newData.hero1 = { ...newData.hero1, image: url };
-                setPageData(newData);
-              }}
-            />
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
+          {/* 🔹 Left side: Image Upload (col-6) */}
+          <Grid item xs={12} md={12}>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6}>
+                <ImageUpload
+                  label="Hero 1 Background Image"
+                  value={pageData.hero1?.image || ""}
+                  onChange={(url) => {
+                    const newData = { ...pageData };
+                    newData.hero1 = { ...newData.hero1, image: url };
+                    setPageData(newData);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
+
+          {/* 🔹 Right side: Title & Button Text stacked (col-6) */}
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
               label="Title"
-              value={pageData.hero1?.title || ''}
+              value={pageData.hero1?.title || ""}
               onChange={(e) => {
                 const newData = { ...pageData };
                 newData.hero1 = { ...newData.hero1, title: e.target.value };
@@ -855,7 +865,7 @@ const PageEditor = () => {
             <TextField
               fullWidth
               label="Button Text"
-              value={pageData.hero1?.buttonText || ''}
+              value={pageData.hero1?.buttonText || ""}
               onChange={(e) => {
                 const newData = { ...pageData };
                 newData.hero1 = { ...newData.hero1, buttonText: e.target.value };
@@ -864,13 +874,15 @@ const PageEditor = () => {
               size="small"
             />
           </Grid>
+
+          {/* 🔹 Full width description below */}
           <Grid item xs={12}>
             <TextField
               fullWidth
               multiline
               rows={3}
               label="Description"
-              value={pageData.hero1?.description || ''}
+              value={pageData.hero1?.description || ""}
               onChange={(e) => {
                 const newData = { ...pageData };
                 newData.hero1 = { ...newData.hero1, description: e.target.value };
@@ -880,22 +892,27 @@ const PageEditor = () => {
             />
           </Grid>
         </Grid>
+
       </Paper>
 
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Hero Section 2</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={3}>
           <Grid item xs={12}>
-            <ImageUpload
-              label="Hero 2 Background Image"
-              value={pageData.hero2?.image || ''}
-              onChange={(url) => {
-                const newData = { ...pageData };
-                newData.hero2 = { ...newData.hero2, image: url };
-                setPageData(newData);
-              }}
-            />
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6}>
+                <ImageUpload
+                  label="Hero 2 Background Image"
+                  value={pageData.hero2?.image || ''}
+                  onChange={(url) => {
+                    const newData = { ...pageData };
+                    newData.hero2 = { ...newData.hero2, image: url };
+                    setPageData(newData);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -942,20 +959,24 @@ const PageEditor = () => {
       </Paper>
 
       {/* Our Story Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Our Story</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ImageUpload
-              label="Story Image"
-              value={pageData.ourStory?.image || ''}
-              onChange={(url) => {
-                const newData = { ...pageData };
-                newData.ourStory = { ...newData.ourStory, image: url };
-                setPageData(newData);
-              }}
-            />
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6}>
+                <ImageUpload
+                  label="Story Image"
+                  value={pageData.ourStory?.image || ''}
+                  onChange={(url) => {
+                    const newData = { ...pageData };
+                    newData.ourStory = { ...newData.ourStory, image: url };
+                    setPageData(newData);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -970,6 +991,8 @@ const PageEditor = () => {
               size="small"
               sx={{ mb: 2 }}
             />
+          </Grid>
+          <Grid item xs={12} md={6}>
             <TextField
               fullWidth
               label="Main Title"
@@ -983,7 +1006,7 @@ const PageEditor = () => {
               sx={{ mb: 2 }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ paddingTop: "6px !important" }}>
             <TextField
               fullWidth
               multiline
@@ -996,7 +1019,7 @@ const PageEditor = () => {
                 setPageData(newData);
               }}
               size="small"
-              sx={{ mb: 2 }}
+              sx={{ mb: 3 }}
             />
             <TextField
               fullWidth
@@ -1016,9 +1039,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Gallery Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Gallery Section</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="Years in Business Text"
@@ -1031,7 +1054,7 @@ const PageEditor = () => {
           size="small"
           sx={{ mb: 2 }}
         />
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           {[1, 2, 3, 4, 5].map((num) => (
             <Grid item xs={12} sm={6} md={4} key={num}>
               <ImageUpload
@@ -1049,22 +1072,26 @@ const PageEditor = () => {
       </Paper>
 
       {/* Commitment Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Our Commitment</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ImageUpload
-              label="Commitment Image"
-              value={pageData.commitment?.image || ''}
-              onChange={(url) => {
-                const newData = { ...pageData };
-                newData.commitment = { ...newData.commitment, image: url };
-                setPageData(newData);
-              }}
-            />
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6}>
+                <ImageUpload
+                  label="Commitment Image"
+                  value={pageData.commitment?.image || ''}
+                  onChange={(url) => {
+                    const newData = { ...pageData };
+                    newData.commitment = { ...newData.commitment, image: url };
+                    setPageData(newData);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               label="Title"
@@ -1092,46 +1119,57 @@ const PageEditor = () => {
               sx={{ mb: 2 }}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="subtitle2" gutterBottom>Commitment Points</Typography>
-            {(pageData.commitment?.points || []).map((point, index) => (
-              <TextField
-                key={index}
-                fullWidth
-                size="small"
-                label={`Point ${index + 1}`}
-                value={point || ''}
-                onChange={(e) => {
-                  const newData = { ...pageData };
-                  const points = [...(newData.commitment?.points || [])];
-                  points[index] = e.target.value;
-                  newData.commitment = { ...newData.commitment, points };
-                  setPageData(newData);
-                }}
-                sx={{ mb: 1 }}
-              />
-            ))}
+          <Grid item xs={12} sx={{ paddingTop: "6px !important" }}>
+            <Typography variant="subtitle2" gutterBottom sx={{ mb: 3 }}>
+              Commitment Points
+            </Typography>
+
+            {/* 🔹 Inner grid for side-by-side fields */}
+            <Grid container spacing={4} justifyContent="center">
+              {(pageData.commitment?.points || []).map((point, index) => (
+                <Grid item xs={12} md={6} key={index}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label={`Point ${index + 1}`}
+                    value={point || ""}
+                    onChange={(e) => {
+                      const newData = { ...pageData };
+                      const points = [...(newData.commitment?.points || [])];
+                      points[index] = e.target.value;
+                      newData.commitment = { ...newData.commitment, points };
+                      setPageData(newData);
+                    }}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
+
         </Grid>
       </Paper>
 
       {/* Vision Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Our Vision</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ImageUpload
-              label="Vision Image"
-              value={pageData.vision?.image || ''}
-              onChange={(url) => {
-                const newData = { ...pageData };
-                newData.vision = { ...newData.vision, image: url };
-                setPageData(newData);
-              }}
-            />
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
+          <Grid item xs={12}>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6}>
+                <ImageUpload
+                  label="Vision Image"
+                  value={pageData.vision?.image || ''}
+                  onChange={(url) => {
+                    const newData = { ...pageData };
+                    newData.vision = { ...newData.vision, image: url };
+                    setPageData(newData);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={12}>
             <TextField
               fullWidth
               label="Title"
@@ -1162,9 +1200,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Brands Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Brands We Work With</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="Section Title"
@@ -1193,9 +1231,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* FAQ Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Frequently Asked Questions</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="FAQ Section Title"
@@ -1223,7 +1261,7 @@ const PageEditor = () => {
                 newData.faq = { ...newData.faq, questions };
                 setPageData(newData);
               }}
-              sx={{ mb: 2 }}
+              sx={{ mt: 3 }}
             />
             <TextField
               fullWidth
@@ -1239,6 +1277,7 @@ const PageEditor = () => {
                 newData.faq = { ...newData.faq, questions };
                 setPageData(newData);
               }}
+              sx={{ mt: 3 }}
             />
           </Paper>
         ))}
@@ -1250,22 +1289,26 @@ const PageEditor = () => {
   const renderServicesPageEditor = () => (
     <>
       {/* Service Details Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Service Details Section</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ImageUpload
-              label="Service Image"
-              value={pageData.serviceDetails?.image || ''}
-              onChange={(url) => {
-                const newData = { ...pageData };
-                newData.serviceDetails = { ...newData.serviceDetails, image: url };
-                setPageData(newData);
-              }}
-            />
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
+          <Grid item xs={12}>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6}>
+                <ImageUpload
+                  label="Service Image"
+                  value={pageData.serviceDetails?.image || ''}
+                  onChange={(url) => {
+                    const newData = { ...pageData };
+                    newData.serviceDetails = { ...newData.serviceDetails, image: url };
+                    setPageData(newData);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               multiline
@@ -1310,9 +1353,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Benefits Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Benefits Section</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="Section Title"
@@ -1325,9 +1368,9 @@ const PageEditor = () => {
           size="small"
           sx={{ mb: 3 }}
         />
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           {(pageData.benefits || []).map((benefit, index) => (
-            <Grid item xs={12} sm={6} md={3} key={benefit.id || index}>
+            <Grid item xs={12} sm={6} key={benefit.id || index}>
               <Paper variant="outlined" sx={{ p: 2 }}>
                 <Typography variant="subtitle2" gutterBottom>Benefit {index + 1}</Typography>
                 <ImageUpload
@@ -1350,7 +1393,7 @@ const PageEditor = () => {
                     newData.benefits[index].title = e.target.value;
                     setPageData(newData);
                   }}
-                  sx={{ mb: 1, mt: 1 }}
+                  sx={{ mt: 3 }}
                 />
                 <TextField
                   fullWidth
@@ -1364,6 +1407,7 @@ const PageEditor = () => {
                     newData.benefits[index].description = e.target.value;
                     setPageData(newData);
                   }}
+                  sx={{ mt: 3 }}
                 />
               </Paper>
             </Grid>
@@ -1372,9 +1416,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Schedule Service Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Schedule Service Section</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="Section Title"
@@ -1385,7 +1429,7 @@ const PageEditor = () => {
             setPageData(newData);
           }}
           size="small"
-          sx={{ mb: 2 }}
+          sx={{ mb: 3 }}
         />
         <TextField
           fullWidth
@@ -1399,7 +1443,7 @@ const PageEditor = () => {
             setPageData(newData);
           }}
           size="small"
-          sx={{ mb: 2 }}
+          sx={{ mb: 3 }}
         />
         <TextField
           fullWidth
@@ -1417,9 +1461,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Opening Hours Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Opening Hours</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="Section Title"
@@ -1430,11 +1474,11 @@ const PageEditor = () => {
             setPageData(newData);
           }}
           size="small"
-          sx={{ mb: 2 }}
+          sx={{ mb: 3 }}
         />
-        <Grid container spacing={2}>
+        <Grid container spacing={4} justifyContent="center">
           {['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map((day) => (
-            <Grid item xs={12} sm={6} md={4} key={day}>
+            <Grid item xs={12} sm={6} md={3} key={day}>
               <TextField
                 fullWidth
                 label={day.charAt(0).toUpperCase() + day.slice(1)}
@@ -1457,20 +1501,24 @@ const PageEditor = () => {
   const renderContactPageEditor = () => (
     <>
       {/* Hero Sections - same as About page */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Hero Section 1</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12}>
-            <ImageUpload
-              label="Hero 1 Background Image"
-              value={pageData.hero1?.image || ''}
-              onChange={(url) => {
-                const newData = { ...pageData };
-                newData.hero1 = { ...newData.hero1, image: url };
-                setPageData(newData);
-              }}
-            />
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6}>
+                <ImageUpload
+                  label="Hero 1 Background Image"
+                  value={pageData.hero1?.image || ''}
+                  onChange={(url) => {
+                    const newData = { ...pageData };
+                    newData.hero1 = { ...newData.hero1, image: url };
+                    setPageData(newData);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -1516,20 +1564,24 @@ const PageEditor = () => {
         </Grid>
       </Paper>
 
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Hero Section 2</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12}>
-            <ImageUpload
-              label="Hero 2 Background Image"
-              value={pageData.hero2?.image || ''}
-              onChange={(url) => {
-                const newData = { ...pageData };
-                newData.hero2 = { ...newData.hero2, image: url };
-                setPageData(newData);
-              }}
-            />
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6}>
+                <ImageUpload
+                  label="Hero 2 Background Image"
+                  value={pageData.hero2?.image || ''}
+                  onChange={(url) => {
+                    const newData = { ...pageData };
+                    newData.hero2 = { ...newData.hero2, image: url };
+                    setPageData(newData);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
@@ -1576,9 +1628,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Contact Header */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Contact Header</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="Page Title"
@@ -1593,9 +1645,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Map Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Map Embed</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           multiline
@@ -1613,9 +1665,9 @@ const PageEditor = () => {
       </Paper>
 
       {/* Get In Touch Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Get In Touch Section</Typography>
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 3 }} />
         <TextField
           fullWidth
           label="Section Title"
@@ -1626,7 +1678,7 @@ const PageEditor = () => {
             setPageData(newData);
           }}
           size="small"
-          sx={{ mb: 2 }}
+          sx={{ mb: 3 }}
         />
         <TextField
           fullWidth
@@ -1644,10 +1696,10 @@ const PageEditor = () => {
       </Paper>
 
       {/* Contact Details */}
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper className="card" sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Contact Details</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
+        <Divider sx={{ mb: 3 }} />
+        <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -1659,7 +1711,7 @@ const PageEditor = () => {
                 setPageData(newData);
               }}
               size="small"
-              sx={{ mb: 2 }}
+              sx={{ mb: 3 }}
             />
             <TextField
               fullWidth
@@ -1671,10 +1723,9 @@ const PageEditor = () => {
                 setPageData(newData);
               }}
               size="small"
-              sx={{ mb: 2 }}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <TextField
               fullWidth
               label="Email"
@@ -1687,7 +1738,7 @@ const PageEditor = () => {
               size="small"
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <TextField
               fullWidth
               label="Phone"
@@ -1700,7 +1751,7 @@ const PageEditor = () => {
               size="small"
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <TextField
               fullWidth
               label="Phone Link (tel:)"
@@ -1714,7 +1765,7 @@ const PageEditor = () => {
             />
           </Grid>
         </Grid>
-        <Typography variant="subtitle2" sx={{ mt: 3, mb: 1 }}>Social Media Links</Typography>
+        <Typography variant="subtitle2" sx={{ mt: 3, mb: 2 }}>Social Media Links</Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <TextField
@@ -1765,38 +1816,46 @@ const PageEditor = () => {
 
   return (
     <Box>
-      <AppBar position="static" color="default" elevation={1}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={() => navigate('/content')}>
-            <ArrowBackIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1, ml: 2 }}>
-            Editing: {getPageName(pageId)}
-          </Typography>
+      <AppBar position="static" color="default" elevation={1} sx={{
+        padding: { xs: '10px', sm: '0' },
+        backgroundColor: '#fff',
+        boxShadow: 'none',
+        borderBottom: '1px solid #e0e0e0',
+      }}
+      >
+        <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between",gap: '10px', flexDirection: { xs: 'column', sm: 'row' }}}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton edge="start" color="inherit" onClick={() => navigate('/content')}>
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              Editing: {getPageName(pageId)}
+            </Typography>
+          </Box>
           <Button
             variant="contained"
-            color="primary"
             startIcon={<SaveIcon />}
             onClick={handleSave}
             disabled={saveMutation.isLoading}
+            sx={{ backgroundColor: '#ffca00', color: '#000', '&:hover': { backgroundColor: '#e6b800' }, boxShadow: 'none', borderRadius: '8px', paddingBlock: '10px', paddingInline: '16px' }}
           >
             {saveMutation.isLoading ? 'Saving...' : 'Save Changes'}
           </Button>
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
         {renderPageEditor()}
 
         {/* Save Button */}
         <Box display="flex" justifyContent="center" mt={4} mb={4}>
           <Button
             variant="contained"
-            color="primary"
             size="large"
             startIcon={<SaveIcon />}
             onClick={handleSave}
             disabled={saveMutation.isLoading}
+            sx={{ backgroundColor: '#ffca00', color: '#000', '&:hover': { backgroundColor: '#e6b800' }, boxShadow: 'none', borderRadius: '8px', paddingBlock: '10px', paddingInline: '16px' }}
           >
             {saveMutation.isLoading ? 'Saving Changes...' : 'Save All Changes'}
           </Button>
@@ -1813,12 +1872,13 @@ const PageEditor = () => {
             rows={4}
             value={currentEdit.value || ''}
             onChange={(e) => setCurrentEdit({ ...currentEdit, value: e.target.value })}
-            sx={{ mt: 2 }}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleSaveEdit} variant="contained">Save</Button>
+        <DialogActions sx={{ paddingInline: 3, paddingBottom: 2, paddingTop: 0 }}>
+          <Button onClick={() => setEditDialogOpen(false)}
+            sx={{ color: '#000', '&:hover': { backgroundColor: '#fff1bd' }, boxShadow: 'none', borderRadius: '8px' }}>Cancel</Button>
+          <Button onClick={handleSaveEdit} variant="contained"
+            sx={{ backgroundColor: '#ffca00', color: '#000', '&:hover': { backgroundColor: '#e6b800' }, boxShadow: 'none', borderRadius: '8px' }}>Save</Button>
         </DialogActions>
       </Dialog>
     </Box>

@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
     // Set default timeout for all requests (10 seconds)
     axios.defaults.timeout = 10000;
     // Set base URL to backend server
-    axios.defaults.baseURL = 'http://localhost:5001';
+    axios.defaults.baseURL = 'http://localhost:5000';
     
     // Add request interceptor to ensure token is always included
     const requestInterceptor = axios.interceptors.request.use(

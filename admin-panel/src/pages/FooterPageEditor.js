@@ -109,10 +109,10 @@ const FooterPageEditor = () => {
       },
       onError: (error) => {
         console.error('Save footer error:', error);
-        const errorMessage = error.response?.data?.message || 
-                           error.response?.data?.error || 
-                           error.message || 
-                           'Failed to save footer';
+        const errorMessage = error.response?.data?.message ||
+          error.response?.data?.error ||
+          error.message ||
+          'Failed to save footer';
         toast.error(errorMessage);
       },
     }
@@ -128,20 +128,28 @@ const FooterPageEditor = () => {
 
   return (
     <Box>
-      <AppBar position="static" color="default" elevation={1}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={() => navigate('/content')}>
-            <ArrowBackIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1, ml: 2 }}>
-            Editing: Footer (Appears on all pages)
-          </Typography>
+      <AppBar position="static" color="default" elevation={1} sx={{
+        padding: { xs: '10px', md: '0' },
+        backgroundColor: '#fff',
+        boxShadow: 'none',
+        borderBottom: '1px solid #e0e0e0',
+      }}>
+        <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: '10px', flexDirection: { xs: 'column', md: 'row' } }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton edge="start" color="inherit" onClick={() => navigate('/content')}>
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              Editing: Footer (Appears on all pages)
+            </Typography>
+          </Box>
           <Button
             variant="contained"
             color="primary"
             startIcon={<SaveIcon />}
             onClick={handleSave}
             disabled={saveMutation.isLoading}
+            sx={{ backgroundColor: '#ffca00', color: '#000', '&:hover': { backgroundColor: '#e6b800' }, boxShadow: 'none', borderRadius: '8px', paddingBlock: '10px', paddingInline: '16px' }}
           >
             {saveMutation.isLoading ? 'Saving...' : 'Save Changes'}
           </Button>
@@ -158,11 +166,11 @@ const FooterPageEditor = () => {
           </Typography>
           <Divider sx={{ mb: 3 }} />
 
-          <Grid container spacing={3}>
+          <Grid container spacing={3} justifyContent="center">
             {/* About Us Section */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <Paper variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
                   About Us Section
                 </Typography>
                 <TextField
@@ -175,7 +183,7 @@ const FooterPageEditor = () => {
                       aboutUs: { ...footerData.aboutUs, title: e.target.value },
                     });
                   }}
-                  sx={{ mb: 2 }}
+                  sx={{ mb: 3 }}
                 />
                 <TextField
                   fullWidth
@@ -194,65 +202,82 @@ const FooterPageEditor = () => {
             </Grid>
 
             {/* Sale Hours Section */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <Paper variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
                   Sale Hours Section
                 </Typography>
-                <TextField
-                  fullWidth
-                  label="Section Title"
-                  value={footerData.saleHours?.title || ''}
-                  onChange={(e) => {
-                    setFooterData({
-                      ...footerData,
-                      saleHours: { ...footerData.saleHours, title: e.target.value },
-                    });
-                  }}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  fullWidth
-                  label="Monday - Friday"
-                  value={footerData.saleHours?.mondayFriday || ''}
-                  onChange={(e) => {
-                    setFooterData({
-                      ...footerData,
-                      saleHours: { ...footerData.saleHours, mondayFriday: e.target.value },
-                    });
-                  }}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  fullWidth
-                  label="Saturday"
-                  value={footerData.saleHours?.saturday || ''}
-                  onChange={(e) => {
-                    setFooterData({
-                      ...footerData,
-                      saleHours: { ...footerData.saleHours, saturday: e.target.value },
-                    });
-                  }}
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  fullWidth
-                  label="Sunday"
-                  value={footerData.saleHours?.sunday || ''}
-                  onChange={(e) => {
-                    setFooterData({
-                      ...footerData,
-                      saleHours: { ...footerData.saleHours, sunday: e.target.value },
-                    });
-                  }}
-                />
+
+                {/* 🔹 Wrap all fields in Grid container */}
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={3}>
+                    <TextField
+                      fullWidth
+                      label="Section Title"
+                      value={footerData.saleHours?.title || ""}
+                      onChange={(e) => {
+                        setFooterData({
+                          ...footerData,
+                          saleHours: { ...footerData.saleHours, title: e.target.value },
+                        });
+                      }}
+                      size="small"
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={3}>
+                    <TextField
+                      fullWidth
+                      label="Monday - Friday"
+                      value={footerData.saleHours?.mondayFriday || ""}
+                      onChange={(e) => {
+                        setFooterData({
+                          ...footerData,
+                          saleHours: { ...footerData.saleHours, mondayFriday: e.target.value },
+                        });
+                      }}
+                      size="small"
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={3}>
+                    <TextField
+                      fullWidth
+                      label="Saturday"
+                      value={footerData.saleHours?.saturday || ""}
+                      onChange={(e) => {
+                        setFooterData({
+                          ...footerData,
+                          saleHours: { ...footerData.saleHours, saturday: e.target.value },
+                        });
+                      }}
+                      size="small"
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={3}>
+                    <TextField
+                      fullWidth
+                      label="Sunday"
+                      value={footerData.saleHours?.sunday || ""}
+                      onChange={(e) => {
+                        setFooterData({
+                          ...footerData,
+                          saleHours: { ...footerData.saleHours, sunday: e.target.value },
+                        });
+                      }}
+                      size="small"
+                    />
+                  </Grid>
+                </Grid>
               </Paper>
             </Grid>
 
+
             {/* Brands Section */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <Paper variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
                   Brands Section
                 </Typography>
                 <TextField
@@ -265,7 +290,7 @@ const FooterPageEditor = () => {
                       brands: { ...footerData.brands, title: e.target.value },
                     });
                   }}
-                  sx={{ mb: 2 }}
+                  sx={{ mb: 3 }}
                 />
                 <TextField
                   fullWidth
@@ -285,9 +310,9 @@ const FooterPageEditor = () => {
             </Grid>
 
             {/* Copyright Section */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <Paper variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
                   Copyright Section
                 </Typography>
                 <TextField
@@ -315,13 +340,14 @@ const FooterPageEditor = () => {
               startIcon={<SaveIcon />}
               onClick={handleSave}
               disabled={saveMutation.isLoading}
+              sx={{ backgroundColor: '#ffca00', color: '#000', '&:hover': { backgroundColor: '#e6b800' }, boxShadow: 'none', borderRadius: '8px', paddingBlock: '10px', paddingInline: '16px' }}
             >
               {saveMutation.isLoading ? 'Saving Changes...' : 'Save Footer Changes'}
             </Button>
           </Box>
         </Paper>
       </Container>
-    </Box>
+    </Box >
   );
 };
 

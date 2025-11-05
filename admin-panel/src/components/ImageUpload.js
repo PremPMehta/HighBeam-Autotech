@@ -55,8 +55,8 @@ const ImageUpload = ({ value, onChange, label = 'Image', showPreview = true }) =
 
       // Get the uploaded image URL - backend returns relative path, prepend backend URL
       const uploadedPath = response.data.data.url;
-      const imageUrl = uploadedPath.startsWith('http') 
-        ? uploadedPath 
+      const imageUrl = uploadedPath.startsWith('http')
+        ? uploadedPath
         : `http://localhost:5001${uploadedPath}`;
       setPreview(imageUrl);
       onChange(imageUrl);
@@ -132,7 +132,7 @@ const ImageUpload = ({ value, onChange, label = 'Image', showPreview = true }) =
             onClick={handleRemoveImage}
             sx={{
               position: 'absolute',
-              top: 8,
+              top: 14,
               right: 8,
               bgcolor: 'rgba(255, 255, 255, 0.9)',
               '&:hover': { bgcolor: 'rgba(255, 255, 255, 1)' },
@@ -150,6 +150,7 @@ const ImageUpload = ({ value, onChange, label = 'Image', showPreview = true }) =
         disabled={uploading}
         onClick={() => fileInputRef.current?.click()}
         fullWidth
+        sx={{ backgroundColor: '#f5f5f5', borderColor: '#e0e0e0', borderRadius: '5px', color: '#000' , padding: '30px', '&:hover': { backgroundColor: '#f5f5f5', borderColor: '#e0e0e0'} }}
       >
         {uploading ? 'Uploading...' : preview ? 'Change Image' : 'Upload Image'}
       </Button>

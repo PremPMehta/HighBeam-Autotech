@@ -65,7 +65,7 @@ const Leads = () => {
       if (statusFilter) params.append('status', statusFilter);
       if (priorityFilter) params.append('priority', priorityFilter);
       params.append('source', sourceFilter);
-      
+
       const response = await axios.get(`/api/leads?${params.toString()}`, {
         timeout: 3000, // 3 second timeout
       });
@@ -202,34 +202,59 @@ const Leads = () => {
   }
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
         Leads Management
       </Typography>
 
       {/* Tabs */}
-      <Paper sx={{ mb: 3 }}>
-        <Tabs value={activeTab} onChange={handleTabChange} aria-label="leads tabs">
-          <Tab label="Contact Us - Leads" />
-          <Tab label="Book Consultation - Leads" />
+      <Paper sx={{ mb: 3 }} className="card">
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          aria-label="leads tabs"
+          // sx={{ paddingInline: "10px" }}
+          TabIndicatorProps={{ style: { display: "none" } }} // ✅ Hide indicator
+        >
+          <Tab
+            label="Contact Us - Leads"
+            sx={{
+              fontSize: "16px",
+              textTransform: "capitalize",
+              borderRadius: "8px 0 0 8px",
+              "&.Mui-selected": { backgroundColor: "#ffca00", color: "#000" },
+            }}
+          />
+          <Tab
+            label="Book Consultation - Leads"
+            sx={{
+              fontSize: "16px",
+              textTransform: "capitalize",
+              "&.Mui-selected": { backgroundColor: "#ffca00", color: "#000" },
+            }}
+          />
         </Tabs>
       </Paper>
 
+
       {/* Filters */}
-      <Paper sx={{ p: 2, mb: 3 }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} sm={4}>
+      <Paper className="card" sx={{ p: 2, mb: 3 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={4}>
             <TextField
               fullWidth
               label="Search leads"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               InputProps={{
-                startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
+                startAdornment: (
+                  <SearchIcon sx={{ mr: 1, color: "text.secondary" }} />
+                ),
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={3}>
+
+          <Grid item xs={12} md={3}>
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
               <Select
@@ -246,7 +271,8 @@ const Leads = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={3}>
+
+          <Grid item xs={12} md={3}>
             <FormControl fullWidth>
               <InputLabel>Priority</InputLabel>
               <Select
@@ -261,15 +287,18 @@ const Leads = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={2}>
+
+          <Grid item xs={12} md={2}>
             <Button
               variant="outlined"
               startIcon={<FilterIcon />}
               onClick={() => {
-                setSearchTerm('');
-                setStatusFilter('');
-                setPriorityFilter('');
+                setSearchTerm("");
+                setStatusFilter("");
+                setPriorityFilter("");
               }}
+              fullWidth
+              sx={{ height: '100%', borderColor: '#ffca00', color: '#000', '&:hover': { borderColor: '#e6b800', backgroundColor: '#fff1bd' } }}
             >
               Clear
             </Button>
@@ -277,94 +306,104 @@ const Leads = () => {
         </Grid>
       </Paper>
 
+
       {/* Leads Table */}
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone</TableCell>
-              {activeTab === 1 && (
-                <>
-                  <TableCell>Car Brand</TableCell>
-                  <TableCell>Car Name</TableCell>
-                  <TableCell>Service Required</TableCell>
-                </>
-              )}
-              {activeTab === 0 && (
-                <TableCell>Message</TableCell>
-              )}
-              <TableCell>Status</TableCell>
-              <TableCell>Priority</TableCell>
-              <TableCell>Created</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={activeTab === 1 ? 10 : 8} align="center">
-                  <LoadingSpinner />
-                </TableCell>
-              </TableRow>
-            ) : leadsData?.leads?.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={activeTab === 1 ? 10 : 8} align="center">
-                  <Typography variant="body2" color="text.secondary">
-                    No leads found
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ) : (
-              leadsData?.leads?.map((lead) => (
-                <TableRow key={lead._id}>
-                  <TableCell>{getLeadName(lead)}</TableCell>
-                  <TableCell>{getLeadEmail(lead)}</TableCell>
-                  <TableCell>{getLeadPhone(lead)}</TableCell>
-                  {activeTab === 1 && (
-                    <>
-                      <TableCell>{lead.carBrand || 'N/A'}</TableCell>
-                      <TableCell>{lead.carName || 'N/A'}</TableCell>
-                      <TableCell>{lead.servicesRequired || 'N/A'}</TableCell>
-                    </>
+      <Box sx={{
+        borderRadius: '15px',
+        overflow: 'hidden',
+      }}>
+        <Box sx={{ overflow: "auto" }}>
+          <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+            <TableContainer component={Paper} className="card" sx={{ overflowX: 'auto', }}>
+              <Table sx={{ minWidth: 650 }} aria-label="users table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Phone</TableCell>
+                    {activeTab === 1 && (
+                      <>
+                        <TableCell>Car Brand</TableCell>
+                        <TableCell>Car Name</TableCell>
+                        <TableCell>Service Required</TableCell>
+                      </>
+                    )}
+                    {activeTab === 0 && (
+                      <TableCell>Message</TableCell>
+                    )}
+                    <TableCell>Status</TableCell>
+                    <TableCell>Priority</TableCell>
+                    <TableCell>Created</TableCell>
+                    <TableCell align="right">Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {isLoading ? (
+                    <TableRow>
+                      <TableCell colSpan={activeTab === 1 ? 10 : 8} align="center">
+                        <LoadingSpinner />
+                      </TableCell>
+                    </TableRow>
+                  ) : leadsData?.leads?.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={activeTab === 1 ? 10 : 8} align="center">
+                        <Typography variant="body2" color="text.secondary">
+                          No leads found
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    leadsData?.leads?.map((lead) => (
+                      <TableRow key={lead._id}>
+                        <TableCell>{getLeadName(lead)}</TableCell>
+                        <TableCell>{getLeadEmail(lead)}</TableCell>
+                        <TableCell>{getLeadPhone(lead)}</TableCell>
+                        {activeTab === 1 && (
+                          <>
+                            <TableCell>{lead.carBrand || 'N/A'}</TableCell>
+                            <TableCell>{lead.carName || 'N/A'}</TableCell>
+                            <TableCell>{lead.servicesRequired || 'N/A'}</TableCell>
+                          </>
+                        )}
+                        {activeTab === 0 && (
+                          <TableCell sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {lead.message || 'N/A'}
+                          </TableCell>
+                        )}
+                        <TableCell>
+                          <Chip
+                            label={lead.status}
+                            color={getStatusColor(lead.status)}
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label={lead.priority}
+                            color={getPriorityColor(lead.priority)}
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {new Date(lead.createdAt).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton
+                            onClick={(e) => handleMenuClick(e, lead)}
+                            size="small"
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
                   )}
-                  {activeTab === 0 && (
-                    <TableCell sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {lead.message || 'N/A'}
-                    </TableCell>
-                  )}
-                  <TableCell>
-                    <Chip
-                      label={lead.status}
-                      color={getStatusColor(lead.status)}
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={lead.priority}
-                      color={getPriorityColor(lead.priority)}
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    {new Date(lead.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={(e) => handleMenuClick(e, lead)}
-                      size="small"
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Box>
+      </Box>
 
       {/* Action Menu */}
       <Menu
@@ -406,7 +445,7 @@ const Leads = () => {
               <Typography variant="body1" gutterBottom>
                 <strong>Phone:</strong> {getLeadPhone(selectedLead)}
               </Typography>
-              
+
               {selectedLead.source === 'book_consultation' && (
                 <>
                   <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
@@ -433,7 +472,7 @@ const Leads = () => {
                   )}
                 </>
               )}
-              
+
               {selectedLead.source === 'contact_form' && selectedLead.message && (
                 <>
                   <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
@@ -444,7 +483,7 @@ const Leads = () => {
                   </Typography>
                 </>
               )}
-              
+
               <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
                 <strong>Status:</strong> {selectedLead.status}
               </Typography>
@@ -454,7 +493,7 @@ const Leads = () => {
               <Typography variant="body1" gutterBottom>
                 <strong>Source:</strong> {selectedLead.source}
               </Typography>
-              
+
               {selectedLead.notes && (
                 <>
                   <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>

@@ -27,13 +27,13 @@ const Content = () => {
 
   // Website pages configuration
   const websitePages = [
-            {
-              pageId: 'home',
-              pageName: 'Home Page',
-              route: '/home',
-              description: 'Main landing page with hero sections, car repair, and core values',
-              editableSections: 35, // Hero sections, car repair, core values, about section (services removed - managed in Categories)
-            },
+    {
+      pageId: 'home',
+      pageName: 'Home Page',
+      route: '/home',
+      description: 'Main landing page with hero sections, car repair, and core values',
+      editableSections: 35, // Hero sections, car repair, core values, about section (services removed - managed in Categories)
+    },
     {
       pageId: 'about',
       pageName: 'About Us',
@@ -107,84 +107,93 @@ const Content = () => {
   // }
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom>
         Content Management
       </Typography>
-      
+
       <Typography variant="body2" color="text.secondary" gutterBottom sx={{ mb: 3 }}>
         Manage all your website pages. Click edit to modify page content.
       </Typography>
+      <Box sx={{
+        borderRadius: '15px',
+        overflow: 'hidden',
+      }}>
+        <Box sx={{ overflow: "auto" }}>
+          <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+            <TableContainer component={Paper} className="card" sx={{ overflowX: 'auto', }}>
+              <Table sx={{ minWidth: 650 }} aria-label="users table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ minWidth: 150 }}><strong>Page Name</strong></TableCell>
+                    <TableCell sx={{ minWidth: 250 }}><strong>Description</strong></TableCell>
+                    <TableCell sx={{ minWidth: 150 }}><strong>Editable Sections</strong></TableCell>
+                    <TableCell><strong>Status</strong></TableCell>
+                    <TableCell sx={{ minWidth: 130 }}><strong>Last Modified</strong></TableCell>
+                    <TableCell align="right"><strong>Actions</strong></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {websitePages.map((page) => {
+                    const pageData = pagesData?.find(p => p.pageId === page.pageId);
+                    const status = getPageStatus(page.pageId);
+                    const lastModified = getLastModified(page.pageId);
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell><strong>Page Name</strong></TableCell>
-              <TableCell><strong>Description</strong></TableCell>
-              <TableCell><strong>Editable Sections</strong></TableCell>
-              <TableCell><strong>Status</strong></TableCell>
-              <TableCell><strong>Last Modified</strong></TableCell>
-              <TableCell align="right"><strong>Actions</strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {websitePages.map((page) => {
-              const pageData = pagesData?.find(p => p.pageId === page.pageId);
-              const status = getPageStatus(page.pageId);
-              const lastModified = getLastModified(page.pageId);
-              
-              return (
-                <TableRow key={page.pageId} hover>
-                  <TableCell>
-                    <Typography variant="body1" fontWeight="medium">
-                      {page.pageName}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" color="text.secondary">
-                      {page.description}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={page.editableSections}
-                      size="small"
-                      color="primary"
-                      variant="outlined"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={status}
-                      size="small"
-                      color={
-                        status === 'Active' ? 'success' :
-                        status === 'Inactive' ? 'warning' :
-                        'default'
-                      }
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" color="text.secondary">
-                      {lastModified}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEditPage(page.pageId)}
-                      title="Edit Page"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                    return (
+                      <TableRow key={page.pageId} hover>
+                        <TableCell>
+                          <Typography variant="body1" fontWeight="medium">
+                            {page.pageName}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2" color="text.secondary">
+                            {page.description}
+                          </Typography>
+                        </TableCell>
+                        <TableCell sx={{ textAlign: 'center' }}>
+                          <Chip
+                            label={page.editableSections}
+                            size="small"
+                            variant="outlined"
+                            sx={{ color: '#ffca00', borderColor: '#ffca00' }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label={status}
+                            size="small"
+                            color={
+                              status === 'Active' ? 'success' :
+                                status === 'Inactive' ? 'warning' :
+                                  'default'
+                            }
+                          />
+                        </TableCell>
+                        <TableCell sx={{ textAlign: 'center' }}>
+                          <Typography variant="body2" color="text.secondary">
+                            {lastModified}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton
+                            color="primary"
+                            onClick={() => handleEditPage(page.pageId)}
+                            title="Edit Page"
+                            sx={{ '&:hover': { backgroundColor: 'unset' } }}
+                          >
+                            <EditIcon sx={{ color: '#ffca00' }} />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 };
