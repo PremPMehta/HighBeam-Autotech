@@ -18,8 +18,16 @@ const productRoutes = require('./routes/products');
 
 const app = express();
 
-// Connect to MongoDB Atlas
-connectDB();
+// Connect to MongoDB Atlas - wait for connection
+(async () => {
+  try {
+    await connectDB();
+    console.log('✅ MongoDB connection established');
+  } catch (error) {
+    console.error('❌ MongoDB connection failed:', error.message);
+    console.log('⚠️  Server will continue but database operations may fail');
+  }
+})();
 
 // Security middleware
 app.use(helmet());
@@ -73,12 +81,17 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 
-// 404 handler
+// 404 handler - only return JSON for API routes
 app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
-  });
+  // If it's an API route, return JSON
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({
+      success: false,
+      message: 'Route not found'
+    });
+  }
+  // For non-API routes (like static files), return 404 without JSON
+  res.status(404).send('Not found');
 });
 
 // Global error handler

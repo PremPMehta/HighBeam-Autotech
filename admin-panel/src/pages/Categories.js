@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -73,6 +73,8 @@ const Categories = () => {
 
         if (categories.length === 0) {
           console.log('No categories found in database');
+        } else {
+          console.log('✅ Successfully loaded categories, returning to component');
         }
 
         return categories;
@@ -250,6 +252,17 @@ const Categories = () => {
       deleteMutation.mutate(selectedCategory._id);
     }
   };
+
+  // Debug logging
+  useEffect(() => {
+    console.log('Categories Component State:', {
+      isLoading,
+      hasData: !!data,
+      dataLength: data?.length || 0,
+      hasError: !!error,
+      errorMessage: error?.message
+    });
+  }, [isLoading, data, error]);
 
   if (isLoading) {
     return (

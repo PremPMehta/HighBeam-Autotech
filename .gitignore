@@ -47,3 +47,6 @@ coverage/
 *.zip
 !node_modules/*.zip
 
+# .env
+*.env/
+
