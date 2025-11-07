@@ -300,51 +300,78 @@ const deleteLead = async (req, res) => {
 // @access  Private
 const getLeadStats = async (req, res) => {
   try {
-    // Quick check - if MongoDB is not connected, return empty stats
-    if (!checkMongoConnection()) {
-      return res.status(200).json({
-        success: true,
-        data: {
-          totalLeads: 0,
-          recentLeads: 0,
-          statusBreakdown: [],
-          sourceBreakdown: []
-        }
-      });
-    }
+    // Calculate time ranges
+    const now = new Date();
+    const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-    let stats, totalLeads, recentLeads;
+    let stats = [], totalLeads = 0, recentLeads = 0, newThisWeek = 0, convertedLeads = 0;
+    
     try {
+      // Try to execute queries even if connection check fails (connection might be established during query)
+      // Get status breakdown - filter by contact_form and book_consultation
       stats = await Promise.race([
         Lead.aggregate([
+          {
+            $match: {
+              source: { $in: ['contact_form', 'book_consultation'] }
+            }
+          },
           {
             $group: {
               _id: '$status',
               count: { $sum: 1 }
             }
           }
-        ]).maxTimeMS(3000),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Query timeout')), 3000))
+        ]),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Query timeout')), 5000))
       ]);
 
+      // Total leads: all leads from contact_form and book_consultation
       totalLeads = await Promise.race([
-        Lead.countDocuments().maxTimeMS(3000),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Count timeout')), 3000))
+        Lead.countDocuments({
+          source: { $in: ['contact_form', 'book_consultation'] }
+        }).maxTimeMS(5000),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Count timeout')), 5000))
       ]);
 
+      // Recent leads: leads from past 24 hours (contact_form and book_consultation)
       recentLeads = await Promise.race([
         Lead.countDocuments({
-          createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
-        }).maxTimeMS(3000),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Count timeout')), 3000))
+          source: { $in: ['contact_form', 'book_consultation'] },
+          createdAt: { $gte: last24Hours }
+        }).maxTimeMS(5000),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Count timeout')), 5000))
+      ]);
+
+      // New this week: leads from past 7 days (contact_form and book_consultation)
+      newThisWeek = await Promise.race([
+        Lead.countDocuments({
+          source: { $in: ['contact_form', 'book_consultation'] },
+          createdAt: { $gte: last7Days }
+        }).maxTimeMS(5000),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Count timeout')), 5000))
+      ]);
+
+      // Converted leads: leads with status "converted" from contact_form and book_consultation
+      convertedLeads = await Promise.race([
+        Lead.countDocuments({
+          source: { $in: ['contact_form', 'book_consultation'] },
+          status: 'converted'
+        }).maxTimeMS(5000),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Count timeout')), 5000))
       ]);
     } catch (queryError) {
-      // If query times out, return empty stats
+      // Log error for debugging but still return 0 values
+      console.error('Error fetching lead statistics:', queryError.message);
+      // Return empty stats instead of error
       return res.status(200).json({
         success: true,
         data: {
           totalLeads: 0,
           recentLeads: 0,
+          newThisWeek: 0,
+          convertedLeads: 0,
           statusBreakdown: [],
           sourceBreakdown: []
         }
@@ -354,12 +381,15 @@ const getLeadStats = async (req, res) => {
     res.status(200).json({
       success: true,
       data: {
-        totalLeads,
-        recentLeads,
-        statusBreakdown: stats
+        totalLeads: totalLeads || 0,
+        recentLeads: recentLeads || 0,
+        newThisWeek: newThisWeek || 0,
+        convertedLeads: convertedLeads || 0,
+        statusBreakdown: stats || []
       }
     });
   } catch (error) {
+    console.error('Error in getLeadStats:', error);
     res.status(500).json({
       success: false,
       message: 'Server error while fetching lead statistics',

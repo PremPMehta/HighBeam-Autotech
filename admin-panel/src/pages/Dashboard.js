@@ -56,10 +56,15 @@ const Dashboard = () => {
   const { data: recentLeads, isLoading: leadsLoading } = useQuery(
     'recentLeads',
     async () => {
+      // Get recent leads from both contact_form and book_consultation
       const response = await axios.get('/api/leads?limit=5&sortBy=createdAt&sortOrder=desc', {
         timeout: 3000, // 3 second timeout
       });
-      return response.data.data.leads;
+      // Filter to only show contact_form and book_consultation leads
+      const allLeads = response.data.data.leads || [];
+      return allLeads.filter(lead => 
+        lead.source === 'contact_form' || lead.source === 'book_consultation'
+      );
     },
     {
       retry: false, // Don't retry on failure
@@ -98,7 +103,7 @@ const Dashboard = () => {
         <Grid item xs={12} sm={6} xl={3}>
           <StatCard className="card"
             title="New This Week"
-            value={stats?.recentLeads || 0}
+            value={stats?.newThisWeek || 0}
             icon={<EmailIcon sx={{ fontSize: 40 }} />}
             color="info"
           />
@@ -106,7 +111,7 @@ const Dashboard = () => {
         <Grid item xs={12} sm={6} xl={3}>
           <StatCard className="card"
             title="Converted"
-            value={stats?.statusBreakdown?.find(s => s._id === 'converted')?.count || 0}
+            value={stats?.convertedLeads || 0}
             icon={<CheckCircleIcon sx={{ fontSize: 40 }} />}
             color="warning"
           />
@@ -120,42 +125,67 @@ const Dashboard = () => {
             </Typography>
             {recentLeads && recentLeads.length > 0 ? (
               <Box>
-                {recentLeads.map((lead) => (
-                  <Box
-                    key={lead._id}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      p: 1,
-                      borderBottom: '1px solid #eee',
-                      '&:last-child': { borderBottom: 'none' },
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="subtitle1">
-                        {lead.firstName} {lead.lastName}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {lead.email} • {lead.phone}
-                      </Typography>
+                {recentLeads.map((lead) => {
+                  // Helper to get lead name (works for both sources)
+                  const getLeadName = (lead) => {
+                    if (lead.source === 'book_consultation') {
+                      return lead.customerName || `${lead.firstName || ''} ${lead.lastName || ''}`.trim() || 'N/A';
+                    }
+                    return `${lead.firstName || ''} ${lead.lastName || ''}`.trim() || 'N/A';
+                  };
+
+                  // Helper to get lead email (works for both sources)
+                  const getLeadEmail = (lead) => {
+                    return lead.email || lead.customerEmail || 'N/A';
+                  };
+
+                  // Helper to get lead phone (works for both sources)
+                  const getLeadPhone = (lead) => {
+                    return lead.phone || lead.customerPhone || 'N/A';
+                  };
+
+                  return (
+                    <Box
+                      key={lead._id}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        p: 1,
+                        borderBottom: '1px solid #eee',
+                        '&:last-child': { borderBottom: 'none' },
+                      }}
+                    >
+                      <Box>
+                        <Typography variant="subtitle1">
+                          {getLeadName(lead)}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {getLeadEmail(lead)} • {getLeadPhone(lead)}
+                        </Typography>
+                        {lead.source === 'book_consultation' && (
+                          <Typography variant="caption" color="text.secondary">
+                            {lead.carBrand} {lead.carName} • {lead.servicesRequired}
+                          </Typography>
+                        )}
+                      </Box>
+                      <Box>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            px: 1,
+                            py: 0.5,
+                            borderRadius: 1,
+                            bgcolor: lead.status === 'new' ? 'primary.light' : lead.status === 'converted' ? 'success.light' : 'info.light',
+                            color: lead.status === 'new' ? 'primary.contrastText' : lead.status === 'converted' ? 'success.contrastText' : 'info.contrastText',
+                          }}
+                        >
+                          {lead.status}
+                        </Typography>
+                      </Box>
                     </Box>
-                    <Box>
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          px: 1,
-                          py: 0.5,
-                          borderRadius: 1,
-                          bgcolor: lead.status === 'new' ? 'primary.light' : 'success.light',
-                          color: lead.status === 'new' ? 'primary.contrastText' : 'success.contrastText',
-                        }}
-                      >
-                        {lead.status}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))}
+                  );
+                })}
               </Box>
             ) : (
               <Typography color="text.secondary">
