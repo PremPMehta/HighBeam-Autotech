@@ -105,7 +105,13 @@ const Products = () => {
         console.log('Number of products:', products.length);
 
         if (products.length === 0) {
-          console.log('No products found in database');
+          console.warn('⚠️ No products found in database');
+          console.warn('   Response structure:', {
+            hasData: !!response.data?.data,
+            hasProducts: !!response.data?.data?.products,
+            success: response.data?.success,
+            message: response.data?.message
+          });
         }
 
         return products;
@@ -273,10 +279,6 @@ const Products = () => {
       toast.error('Product title is required');
       return;
     }
-    if (!formData.image) {
-      toast.error('Product image is required');
-      return;
-    }
     if (!formData.price || parseFloat(formData.price) <= 0) {
       toast.error('Valid price is required');
       return;
@@ -380,11 +382,18 @@ const Products = () => {
                         <TableCell>
                           {product.image ? (
                             <img
-                              src={product.image.startsWith('http') ? product.image : `http://localhost:5001${product.image}`}
+                              src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
                               alt={product.name}
                               style={{ width: 50, height: 50, objectFit: 'cover', borderRadius: 4 }}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                if (e.target.nextSibling) {
+                                  e.target.nextSibling.style.display = 'flex';
+                                }
+                              }}
                             />
-                          ) : (
+                          ) : null}
+                          {!product.image && (
                             <Box
                               sx={{
                                 width: 50,
@@ -430,6 +439,26 @@ const Products = () => {
                             label={product.isActive ? 'Active' : 'Inactive'}
                             color={product.isActive ? 'success' : 'default'}
                             size="small"
+                            onClick={async () => {
+                              try {
+                                const updatedProduct = {
+                                  ...product,
+                                  isActive: !product.isActive
+                                };
+                                await axios.put(`/api/products/${product._id}`, {
+                                  ...updatedProduct,
+                                  category: product.category?._id || product.category,
+                                  price: product.price,
+                                  displayOrder: product.displayOrder || 0
+                                });
+                                queryClient.invalidateQueries('products');
+                                toast.success(`Product ${!product.isActive ? 'activated' : 'deactivated'} successfully!`);
+                              } catch (error) {
+                                toast.error('Failed to update product status');
+                                console.error('Error updating product status:', error);
+                              }
+                            }}
+                            sx={{ cursor: 'pointer' }}
                           />
                         </TableCell>
                         <TableCell align="right">
@@ -583,12 +612,27 @@ const Products = () => {
               />
             </Grid>
             <Grid item xs={2} sx={{ mt: 2 }}>
-              <Box display="flex" alignItems="center" height="100%">
+              <Box display="flex" flexDirection="column" height="100%">
+                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary' }}>
+                  Status
+                </Typography>
                 <Chip
                   label={formData.isActive ? 'Active' : 'Inactive'}
                   color={formData.isActive ? 'success' : 'default'}
-                  onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
-                  sx={{ cursor: 'pointer', width: '100%', height: '100%', borderRadius: '5px', fontSize: '14px' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFormData({ ...formData, isActive: !formData.isActive });
+                  }}
+                  sx={{ 
+                    cursor: 'pointer', 
+                    width: '100%', 
+                    height: '40px', 
+                    borderRadius: '5px', 
+                    fontSize: '14px',
+                    '&:hover': {
+                      opacity: 0.8
+                    }
+                  }}
                 />
               </Box>
             </Grid>

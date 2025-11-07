@@ -12,11 +12,14 @@ const checkMongoConnection = () => {
 const getAllCategories = async (req, res) => {
   try {
     console.log('📥 GET /api/categories - Request received');
+    console.log('🔐 User authenticated:', req.user ? 'Yes' : 'No');
     
     if (!checkMongoConnection()) {
-      console.warn('⚠️ MongoDB not connected, returning empty array');
-      return res.status(200).json({
-        success: true,
+      console.error('❌ MongoDB not connected! Connection state:', mongoose.connection.readyState);
+      console.error('   State 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting');
+      return res.status(503).json({
+        success: false,
+        message: 'Database connection unavailable. Please check MongoDB connection.',
         data: { categories: [] }
       });
     }

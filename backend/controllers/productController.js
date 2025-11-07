@@ -12,11 +12,14 @@ const checkMongoConnection = () => {
 const getAllProducts = async (req, res) => {
   try {
     console.log('📥 GET /api/products - Request received');
+    console.log('🔐 User authenticated:', req.user ? 'Yes' : 'No');
     
     if (!checkMongoConnection()) {
-      console.warn('⚠️ MongoDB not connected, returning empty array');
-      return res.status(200).json({
-        success: true,
+      console.error('❌ MongoDB not connected! Connection state:', mongoose.connection.readyState);
+      console.error('   State 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting');
+      return res.status(503).json({
+        success: false,
+        message: 'Database connection unavailable. Please check MongoDB connection.',
         data: { products: [] }
       });
     }
@@ -33,11 +36,36 @@ const getAllProducts = async (req, res) => {
     console.log('🔍 Querying products from database with filter:', filter);
     const products = await Promise.race([
       Product.find(filter)
-        .populate('category', 'name slug')
+        .populate('category', 'name slug displayOrder')
         .sort({ displayOrder: 1, name: 1 })
         .maxTimeMS(3000),
       new Promise((_, reject) => setTimeout(() => reject(new Error('Query timeout')), 3000))
     ]);
+
+    // Sort products: first by category displayOrder, then by product displayOrder, then alphabetically
+    try {
+      products.sort((a, b) => {
+        // First sort by category displayOrder
+        const categoryOrderA = (a.category && a.category.displayOrder !== undefined) ? a.category.displayOrder : 999;
+        const categoryOrderB = (b.category && b.category.displayOrder !== undefined) ? b.category.displayOrder : 999;
+        if (categoryOrderA !== categoryOrderB) {
+          return categoryOrderA - categoryOrderB;
+        }
+        // Then by product displayOrder
+        const productOrderA = (a.displayOrder !== undefined) ? a.displayOrder : 999;
+        const productOrderB = (b.displayOrder !== undefined) ? b.displayOrder : 999;
+        if (productOrderA !== productOrderB) {
+          return productOrderA - productOrderB;
+        }
+        // Finally alphabetically by name
+        const nameA = a.name || '';
+        const nameB = b.name || '';
+        return nameA.localeCompare(nameB);
+      });
+    } catch (sortError) {
+      console.error('Error sorting products:', sortError);
+      // Continue with unsorted products if sorting fails
+    }
 
     console.log(`✅ Found ${products.length} products`);
     if (products.length > 0) {

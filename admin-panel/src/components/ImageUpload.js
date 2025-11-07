@@ -57,13 +57,17 @@ const ImageUpload = ({ value, onChange, label = 'Image', showPreview = true }) =
       const uploadedPath = response.data.data.url;
       const imageUrl = uploadedPath.startsWith('http')
         ? uploadedPath
-        : `http://localhost:5001${uploadedPath}`;
+        : `http://localhost:5000${uploadedPath}`;
+      
+      // Update preview with uploaded image URL (this ensures the image persists)
       setPreview(imageUrl);
       onChange(imageUrl);
       toast.success('Image uploaded successfully!');
     } catch (error) {
+      console.error('Image upload error:', error);
       toast.error(error.response?.data?.message || 'Failed to upload image');
-      setPreview(value || null); // Revert to previous value
+      // Keep the FileReader preview even if upload fails
+      // Don't revert to previous value, keep the local preview
     } finally {
       setUploading(false);
       // Reset file input

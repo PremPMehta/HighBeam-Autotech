@@ -53,7 +53,7 @@ export default function Contactus() {
 
     try {
       // Send to new backend API for lead management
-      const response = await fetch('http://localhost:5001/api/leads', {
+      const response = await fetch('http://localhost:5000/api/leads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,12 +73,48 @@ export default function Contactus() {
         console.log('Lead created successfully:', result);
         toast.success("Message sent successfully! We'll contact you soon.");
         resetForm();
+        setIsSubmitting(false);
+        return; // Exit early on success
       } else {
-        throw new Error('Failed to submit form');
+        // Handle error response
+        const errorData = await response.json().catch(() => ({}));
+        
+        // Get all validation errors if available
+        let errorMessage = errorData.message || 'Failed to submit form';
+        if (errorData.errors && errorData.errors.length > 0) {
+          // Show the first error message
+          errorMessage = errorData.errors[0].msg || errorData.errors[0].message || errorMessage;
+          // Log all errors for debugging
+          console.error('Validation errors:', errorData.errors);
+        }
+        
+        // If it's a validation error (400), don't fallback to EmailJS
+        if (response.status === 400) {
+          toast.error(errorMessage);
+          setIsSubmitting(false);
+          return; // Exit early on validation error
+        }
+        
+        // For other errors, throw to be caught by catch block
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
       }
 
     } catch (error) {
       console.error("Form submission failed:", error);
+      
+      // Only fallback to EmailJS if it's a connection error (not validation error)
+      // Check if error is connection-related
+      const isConnectionError = error.message.includes('Failed to fetch') || 
+                                error.message.includes('ERR_CONNECTION_REFUSED') ||
+                                error.message.includes('NetworkError') ||
+                                error.name === 'TypeError';
+      
+      if (!isConnectionError) {
+        // Not a connection error, don't fallback - validation or other error
+        setIsSubmitting(false);
+        return;
+      }
       
       // Fallback to original EmailJS method if backend is not available
       try {

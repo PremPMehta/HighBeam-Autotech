@@ -22,24 +22,54 @@ export default function BookConsultation() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Special handling for phone number - only allow digits and max 10 digits
+    if (name === 'customerPhone') {
+      // Remove any non-digit characters
+      const digitsOnly = value.replace(/\D/g, '');
+      // Limit to 10 digits
+      const limitedDigits = digitsOnly.slice(0, 10);
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: limitedDigits
+      }));
+      
+      // Validate phone number
+      if (limitedDigits.length > 0 && limitedDigits.length !== 10) {
+        setPhoneError('Phone number must contain 10 digits');
+      } else {
+        setPhoneError('');
+      }
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate phone number before submission
+    if (formData.customerPhone.length !== 10) {
+      setPhoneError('Phone number must be exactly 10 digits');
+      toast.error('Please enter a valid 10-digit phone number');
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
       // Send to new backend API for lead management
-      const response = await fetch('http://localhost:5001/api/leads', {
+      const response = await fetch('http://localhost:5000/api/leads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,12 +91,49 @@ export default function BookConsultation() {
         console.log('Booking lead created successfully:', result);
         toast.success("Booking request sent successfully! We'll contact you soon.");
         resetForm();
+        setPhoneError('');
+        setIsSubmitting(false);
+        return; // Exit early on success
       } else {
-        throw new Error('Failed to submit booking form');
+        // Handle error response
+        const errorData = await response.json().catch(() => ({}));
+        
+        // Get all validation errors if available
+        let errorMessage = errorData.message || 'Failed to submit booking form';
+        if (errorData.errors && errorData.errors.length > 0) {
+          // Show the first error message
+          errorMessage = errorData.errors[0].msg || errorData.errors[0].message || errorMessage;
+          // Log all errors for debugging
+          console.error('Validation errors:', errorData.errors);
+        }
+        
+        // If it's a validation error (400), don't fallback to EmailJS
+        if (response.status === 400) {
+          toast.error(errorMessage);
+          setIsSubmitting(false);
+          return; // Exit early on validation error
+        }
+        
+        // For other errors, throw to be caught by catch block
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
       }
 
     } catch (error) {
       console.error("Form submission failed:", error);
+      
+      // Only fallback to EmailJS if it's a connection error (not validation error)
+      // Check if error is connection-related
+      const isConnectionError = error.message.includes('Failed to fetch') || 
+                                error.message.includes('ERR_CONNECTION_REFUSED') ||
+                                error.message.includes('NetworkError') ||
+                                error.name === 'TypeError';
+      
+      if (!isConnectionError) {
+        // Not a connection error, don't fallback - validation or other error
+        setIsSubmitting(false);
+        return;
+      }
       
       // Fallback to original EmailJS method if backend is not available
       try {
@@ -95,6 +162,7 @@ export default function BookConsultation() {
           if (response.status === 200) {
             toast.success("Booking request sent successfully! We'll contact you soon.");
             resetForm();
+            setPhoneError('');
           }
         } else {
           // Fallback: Show success and log data
@@ -110,6 +178,7 @@ export default function BookConsultation() {
           
           toast.success("Booking request submitted successfully! We'll contact you soon.");
           resetForm();
+          setPhoneError('');
         }
       } catch (fallbackError) {
         console.error("Fallback email sending failed:", fallbackError);
@@ -385,9 +454,16 @@ Vahicle                 <Form.Control type="email" placeholder="Email address" /
                       name="customerPhone"
                       value={formData.customerPhone}
                       onChange={handleInputChange}
-                      placeholder="Your Mobile Number" 
+                      placeholder="Your Mobile Number (10 digits)" 
                       required
+                      maxLength={10}
+                      isInvalid={!!phoneError}
                     />
+                    {phoneError && (
+                      <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                        {phoneError}
+                      </Form.Control.Feedback>
+                    )}
                   </div>
                 </Col>
               </Row>

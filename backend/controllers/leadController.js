@@ -184,6 +184,14 @@ const createLead = async (req, res) => {
       if (leadData.comments && !leadData.message) {
         leadData.message = leadData.comments;
       }
+      // Set default priority to 'high' for book_consultation if not provided
+      if (!leadData.priority) {
+        leadData.priority = 'high';
+      }
+      // Set default status to 'new' if not provided
+      if (!leadData.status) {
+        leadData.status = 'new';
+      }
     }
 
     // For contact_form, ensure required fields are present
@@ -193,6 +201,14 @@ const createLead = async (req, res) => {
           success: false,
           message: 'Missing required fields for contact form'
         });
+      }
+      // Set default priority to 'high' for contact_form if not provided
+      if (!leadData.priority) {
+        leadData.priority = 'high';
+      }
+      // Set default status to 'new' if not provided
+      if (!leadData.status) {
+        leadData.status = 'new';
       }
     }
 

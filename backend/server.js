@@ -29,8 +29,11 @@ const app = express();
   }
 })();
 
-// Security middleware
-app.use(helmet());
+// Security middleware - configure helmet to allow images
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  contentSecurityPolicy: false, // Disable CSP for now to allow images
+}));
 app.use(compression());
 
 // Rate limiting
@@ -60,8 +63,13 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve uploaded files statically
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve uploaded files statically with CORS headers
+app.use('/uploads', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+}, express.static(path.join(__dirname, 'uploads')));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -91,6 +99,10 @@ app.use('*', (req, res) => {
     });
   }
   // For non-API routes (like static files), return 404 without JSON
+  // Don't log errors for common static file requests
+  if (!req.path.includes('style.css') && !req.path.includes('manifest.json') && !req.path.includes('favicon.ico')) {
+    console.log(`404: ${req.method} ${req.path}`);
+  }
   res.status(404).send('Not found');
 });
 

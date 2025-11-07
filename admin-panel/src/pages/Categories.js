@@ -72,7 +72,13 @@ const Categories = () => {
         console.log('Number of categories:', categories.length);
 
         if (categories.length === 0) {
-          console.log('No categories found in database');
+          console.warn('⚠️ No categories found in database');
+          console.warn('   Response structure:', {
+            hasData: !!response.data?.data,
+            hasCategories: !!response.data?.data?.categories,
+            success: response.data?.success,
+            message: response.data?.message
+          });
         } else {
           console.log('✅ Successfully loaded categories, returning to component');
         }

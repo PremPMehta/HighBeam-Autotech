@@ -54,7 +54,7 @@ const leadSchema = new mongoose.Schema({
   customerPhone: {
     type: String,
     trim: true,
-    match: [/^[\+]?[1-9][\d]{0,15}$/, 'Please enter a valid phone number']
+    match: [/^\d{10}$/, 'Phone number must be exactly 10 digits']
   },
   message: {
     type: String,
@@ -94,7 +94,24 @@ const leadSchema = new mongoose.Schema({
     type: Date
   }
 }, {
-  timestamps: true
+  timestamps: true  
+});
+
+// Pre-save hook to set default priority for book_consultation and contact_form leads
+leadSchema.pre('save', function(next) {
+  // If source is book_consultation or contact_form and this is a new document, set priority to 'high'
+  // This overrides the default 'medium' priority for these lead types
+  if (this.isNew && (this.source === 'book_consultation' || this.source === 'contact_form')) {
+    // Only set to 'high' if priority wasn't explicitly set (or is the default 'medium')
+    if (!this.priority || this.priority === 'medium') {
+      this.priority = 'high';
+    }
+  }
+  // Ensure status is 'new' by default if not set
+  if (!this.status) {
+    this.status = 'new';
+  }
+  next();
 });
 
 // Index for better query performance

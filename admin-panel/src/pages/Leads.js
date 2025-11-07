@@ -50,6 +50,8 @@ const Leads = () => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [editForm, setEditForm] = useState({});
+  const [editingLeadId, setEditingLeadId] = useState(null);
+  const [viewingLead, setViewingLead] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -88,6 +90,8 @@ const Leads = () => {
         queryClient.invalidateQueries('leads');
         toast.success('Lead updated successfully');
         setEditDialogOpen(false);
+        setEditingLeadId(null);
+        setEditForm({});
       },
       onError: (error) => {
         toast.error(error.response?.data?.message || 'Failed to update lead');
@@ -123,11 +127,24 @@ const Leads = () => {
   };
 
   const handleViewDetails = () => {
+    if (!selectedLead) {
+      toast.error('Unable to view lead details. Please try again.');
+      handleMenuClose();
+      return;
+    }
+    // Store the lead data before closing the menu
+    setViewingLead(selectedLead);
     setDetailDialogOpen(true);
     handleMenuClose();
   };
 
   const handleEdit = () => {
+    if (!selectedLead || !selectedLead._id) {
+      toast.error('Unable to edit lead. Please try again.');
+      handleMenuClose();
+      return;
+    }
+    setEditingLeadId(selectedLead._id);
     setEditForm({
       status: selectedLead.status,
       priority: selectedLead.priority,
@@ -145,8 +162,13 @@ const Leads = () => {
   };
 
   const handleEditSubmit = () => {
+    if (!editingLeadId) {
+      toast.error('Unable to update lead. Please try again.');
+      setEditDialogOpen(false);
+      return;
+    }
     updateLeadMutation.mutate({
-      id: selectedLead._id,
+      id: editingLeadId,
       data: editForm,
     });
   };
@@ -428,87 +450,159 @@ const Leads = () => {
       {/* Lead Details Dialog */}
       <Dialog
         open={detailDialogOpen}
-        onClose={() => setDetailDialogOpen(false)}
+        onClose={() => {
+          setDetailDialogOpen(false);
+          setViewingLead(null);
+        }}
         maxWidth="md"
         fullWidth
       >
         <DialogTitle>Lead Details</DialogTitle>
         <DialogContent>
-          {selectedLead && (
-            <Box>
-              <Typography variant="h6" gutterBottom>
-                {getLeadName(selectedLead)}
+          {viewingLead ? (
+            <Box sx={{ pt: 1 }}>
+              <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+                {getLeadName(viewingLead)}
               </Typography>
-              <Typography variant="body1" gutterBottom>
-                <strong>Email:</strong> {getLeadEmail(selectedLead)}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                <strong>Phone:</strong> {getLeadPhone(selectedLead)}
-              </Typography>
+              
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  <strong>Email:</strong>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {getLeadEmail(viewingLead)}
+                </Typography>
+              </Box>
 
-              {selectedLead.source === 'book_consultation' && (
-                <>
-                  <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
-                    <strong>Vehicle Details:</strong>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  <strong>Phone:</strong>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {getLeadPhone(viewingLead)}
+                </Typography>
+              </Box>
+
+              {viewingLead.source === 'book_consultation' && (
+                <Box sx={{ mb: 2, mt: 3 }}>
+                  <Typography variant="h6" gutterBottom sx={{ mb: 1 }}>
+                    Vehicle Details
                   </Typography>
-                  <Typography variant="body2" sx={{ pl: 2 }}>
-                    <strong>Car Brand:</strong> {selectedLead.carBrand || 'N/A'}
-                  </Typography>
-                  <Typography variant="body2" sx={{ pl: 2 }}>
-                    <strong>Car Name:</strong> {selectedLead.carName || 'N/A'}
-                  </Typography>
-                  <Typography variant="body2" sx={{ pl: 2 }}>
-                    <strong>Service Required:</strong> {selectedLead.servicesRequired || 'N/A'}
-                  </Typography>
-                  {selectedLead.comments && (
-                    <>
-                      <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
-                        <strong>Comments:</strong>
+                  <Box sx={{ pl: 2 }}>
+                    <Box sx={{ mb: 1.5 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Car Brand:</strong>
                       </Typography>
-                      <Typography variant="body2" sx={{ pl: 2, fontStyle: 'italic' }}>
-                        {selectedLead.comments}
+                      <Typography variant="body1">
+                        {viewingLead.carBrand || 'N/A'}
                       </Typography>
-                    </>
-                  )}
-                </>
+                    </Box>
+                    <Box sx={{ mb: 1.5 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Car Name:</strong>
+                      </Typography>
+                      <Typography variant="body1">
+                        {viewingLead.carName || 'N/A'}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ mb: 1.5 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        <strong>Service Required:</strong>
+                      </Typography>
+                      <Typography variant="body1">
+                        {viewingLead.servicesRequired || 'N/A'}
+                      </Typography>
+                    </Box>
+                    {viewingLead.comments && (
+                      <Box sx={{ mb: 1.5, mt: 2 }}>
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
+                          <strong>Comments:</strong>
+                        </Typography>
+                        <Typography variant="body1" sx={{ fontStyle: 'italic', whiteSpace: 'pre-wrap' }}>
+                          {viewingLead.comments}
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
               )}
 
-              {selectedLead.source === 'contact_form' && selectedLead.message && (
-                <>
-                  <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
-                    <strong>Message:</strong>
+              {viewingLead.source === 'contact_form' && (
+                <Box sx={{ mb: 2, mt: 3 }}>
+                  <Typography variant="h6" gutterBottom sx={{ mb: 1 }}>
+                    Message
                   </Typography>
-                  <Typography variant="body2" sx={{ pl: 2, fontStyle: 'italic' }}>
-                    {selectedLead.message}
+                  <Typography variant="body1" sx={{ pl: 2, fontStyle: 'italic', whiteSpace: 'pre-wrap' }}>
+                    {viewingLead.message || 'No message provided'}
                   </Typography>
-                </>
+                </Box>
               )}
 
-              <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
-                <strong>Status:</strong> {selectedLead.status}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                <strong>Priority:</strong> {selectedLead.priority}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                <strong>Source:</strong> {selectedLead.source}
-              </Typography>
+              <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: 'divider' }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      <strong>Status:</strong>
+                    </Typography>
+                    <Chip
+                      label={viewingLead.status}
+                      color={getStatusColor(viewingLead.status)}
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      <strong>Priority:</strong>
+                    </Typography>
+                    <Chip
+                      label={viewingLead.priority}
+                      color={getPriorityColor(viewingLead.priority)}
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      <strong>Source:</strong>
+                    </Typography>
+                    <Typography variant="body1">
+                      {viewingLead.source === 'contact_form' ? 'Contact Us' : 'Book Consultation'}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      <strong>Created:</strong>
+                    </Typography>
+                    <Typography variant="body1">
+                      {new Date(viewingLead.createdAt).toLocaleString()}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
 
-              {selectedLead.notes && (
-                <>
-                  <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
-                    <strong>Admin Notes:</strong>
+              {viewingLead.notes && (
+                <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: 'divider' }}>
+                  <Typography variant="h6" gutterBottom sx={{ mb: 1 }}>
+                    Admin Notes
                   </Typography>
-                  <Typography variant="body2" sx={{ pl: 2, fontStyle: 'italic' }}>
-                    {selectedLead.notes}
+                  <Typography variant="body1" sx={{ pl: 2, fontStyle: 'italic', whiteSpace: 'pre-wrap' }}>
+                    {viewingLead.notes}
                   </Typography>
-                </>
+                </Box>
               )}
+            </Box>
+          ) : (
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="body2" color="text.secondary">
+                Loading lead details...
+              </Typography>
             </Box>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDetailDialogOpen(false)}>Close</Button>
+          <Button onClick={() => {
+            setDetailDialogOpen(false);
+            setViewingLead(null);
+          }}>Close</Button>
         </DialogActions>
       </Dialog>
 
@@ -560,11 +654,15 @@ const Leads = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => {
+            setEditDialogOpen(false);
+            setEditingLeadId(null);
+            setEditForm({});
+          }}>Cancel</Button>
           <Button
             onClick={handleEditSubmit}
             variant="contained"
-            disabled={updateLeadMutation.isLoading}
+            disabled={updateLeadMutation.isLoading || !editingLeadId}
           >
             {updateLeadMutation.isLoading ? 'Updating...' : 'Update'}
           </Button>
